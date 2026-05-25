@@ -97,9 +97,6 @@ const screenShotPaths = {
   reset: {
     resetDisplayedCorrectly: 'resetDisplayedCorrectly.png',
   },
-  zoomIn: {
-    magnifyViewportDisplayedCorrectly: 'magnifyViewportDisplayedCorrectly.png',
-  },
   rtDataOverlayForUnreferencedDisplaySetNoHydration: {
     overlayFirstImage: 'overlayFirstImage.png',
     overlayMiddleImage: 'overlayMiddleImage.png',
@@ -132,10 +129,6 @@ const screenShotPaths = {
     segPreHydration: 'segPreHydration.png',
     segJumpToSegment: 'segJumpToSegment.png',
   },
-  segHydrationDeleteAndReload: {
-    viewportAfterSecondHydration: 'viewportAfterSecondHydration.png',
-    viewportAfterSecondDelete: 'viewportAfterSecondDelete.png',
-  },
   segHydrationThenMPR: {
     segPostHydration: 'segPostHydration.png',
     segPostHydrationMPRAxialPrimary: 'segPostHydrationMPRAxialPrimary.png',
@@ -150,10 +143,6 @@ const screenShotPaths = {
     threeDFourUpBeforeSEG: 'threeDFourUpBeforeSEG.png',
     threeDFourUpAfterSEG: 'threeDFourUpAfterSEG.png',
     threeDFourUpAfterSegHydrated: 'threeDFourUpAfterSegHydrated.png',
-  },
-  segHydrationAfterLayoutSwitchTo3By2: {
-    afterSEGHydrated: 'afterSEGHydrated.png',
-    backTo3DFourUp: 'backTo3DFourUp.png',
   },
   segNoHydrationThenMPR: {
     segNoHydrationPreMPR: 'segNoHydrationPreMpr.png',
@@ -188,11 +177,12 @@ const screenShotPaths = {
     rtPostHydration: 'rtPostHydration.png',
     rtPreHydration: 'rtPreHydration.png',
   },
-  rtHydrationDisableConfirmation: {
-    firstLoadPostHydration: 'firstLoadPostHydration.png',
-    viewportAfterFirstDelete: 'viewportAfterFirstDelete.png',
-    secondLoadPostHydration: 'secondLoadPostHydration.png',
-    viewportAfterSecondDelete: 'viewportAfterSecondDelete.png',
+  crosshairs: {
+    crosshairsRendered: 'crosshairsRendered.png',
+    crosshairsRotated: 'crosshairsRotated.png',
+    crosshairsSlabThickness: 'crosshairsSlabThickness.png',
+    crosshairsResetToolbar: 'crosshairsResetToolbar.png',
+    crosshairsNewDisplayset: 'crosshairsNewDisplayset.png',
   },
   tmtvRendering: {
     tmtvDisplayedCorrectly: 'tmtvDisplayedCorrectly.png',

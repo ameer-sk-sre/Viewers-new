@@ -70,7 +70,7 @@ function promptHydrationDialog({
 }: HydrationDialogProps): Promise<boolean | HydrationSRResult> {
   const { uiViewportDialogService, customizationService } = servicesManager.services;
   const extensionManager = servicesManager._extensionManager;
-  const appConfig = extensionManager.appConfig;
+  const appConfig = extensionManager._appConfig;
 
   // Todo: make this use enum from the extension, we should move the enum
   const standardMode = appConfig?.measurementTrackingMode === 'standard';
@@ -94,30 +94,22 @@ function promptHydrationDialog({
       if (type === HydrationType.SEG) {
         // SEG needs setTimeout
         window.setTimeout(async () => {
-          try {
-            const isHydrated = await hydrateCallback({
-              segDisplaySet: displaySet,
-              viewportId,
-            });
-            resolve(isHydrated);
-          } catch (error) {
-            reject(error);
-          }
+          const isHydrated = await hydrateCallback({
+            segDisplaySet: displaySet,
+            viewportId,
+          });
+
+          resolve(isHydrated);
         }, 0);
       } else if (type === HydrationType.RTSTRUCT) {
         // RT hydration
-        window.setTimeout(async () => {
-          try {
-            const isHydrated = await hydrateCallback({
-              rtDisplaySet: displaySet,
-              viewportId,
-              servicesManager,
-            });
-            resolve(isHydrated);
-          } catch (error) {
-            reject(error);
-          }
-        }, 0);
+        const isHydrated = await hydrateCallback({
+          rtDisplaySet: displaySet,
+          viewportId,
+          servicesManager,
+        });
+
+        resolve(isHydrated);
       } else if (type === HydrationType.SR) {
         // SR has a different result structure
         const hydrationResult = await hydrateCallback(displaySet);

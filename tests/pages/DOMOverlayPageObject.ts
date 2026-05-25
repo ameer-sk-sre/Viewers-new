@@ -1,5 +1,4 @@
 import { Locator, Page } from '@playwright/test';
-import { DicomTagBrowserPageObject } from './DicomTagBrowserPageObject';
 
 export class DOMOverlayPageObject {
   readonly page: Page;
@@ -33,7 +32,6 @@ export class DOMOverlayPageObject {
       get input() {
         const locator = page.getByTestId('dialog-input');
         const saveButton = page.getByTestId('input-dialog-save-button');
-        const cancelButton = page.getByTestId('input-dialog-cancel-button');
         return {
           locator,
           fill: async (text: string) => {
@@ -46,20 +44,8 @@ export class DOMOverlayPageObject {
           save: async () => {
             await saveButton.click();
           },
-          fillAndCancel: async (text: string) => {
-            await locator.fill(text);
-            await cancelButton.click();
-          },
-          cancel: async () => {
-            await cancelButton.click();
-          },
         };
       },
-
-      get dicomTagBrowser() {
-        return new DicomTagBrowserPageObject(page);
-      },
-
       title: page.locator('[role="dialog"] h2'),
     };
   }

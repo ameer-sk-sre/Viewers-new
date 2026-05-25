@@ -1,7 +1,4 @@
-import { Types, DicomMetadataStore, utils } from '@ohif/core';
-import dcmjs from 'dcmjs';
-
-const { downloadBlob } = utils;
+import { Types, DicomMetadataStore } from '@ohif/core';
 
 import { ContextMenuController } from './CustomizableContextMenu';
 import DicomTagBrowser from './DicomTagBrowser/DicomTagBrowser';
@@ -69,8 +66,8 @@ const commandsModule = ({
      */
     addDisplaySetAsLayer: ({ viewportId, displaySetInstanceUID, removeFirst = false }) => {
       if (!viewportId) {
-        const { activeViewportId } = servicesManager.services.viewportGridService.getState();
-        viewportId = activeViewportId;
+          const { activeViewportId } = servicesManager.services.viewportGridService.getState();
+          viewportId = activeViewportId;
       }
 
       if (!viewportId || !displaySetInstanceUID) {
@@ -154,25 +151,20 @@ const commandsModule = ({
         return;
       }
 
-      // Check if it's a segmentation and handle accordingly.
-      // Note that for the sake of hydrated segmentations, we remove the
-      // segmentation before checking if the display set is indeed in the viewport.
-      // This is because hydrated segmentations are not in the viewport per se
-      // {i.e. they are not layered) but are simply referenced by the display
-      // set in the viewport.
-      const isSegmentation = DERIVED_OVERLAY_MODALITIES.includes(displaySet.Modality);
-      if (isSegmentation) {
-        segmentationService.removeRepresentationsFromViewport(viewportId, {
-          segmentationId: displaySetInstanceUID,
-        });
-      }
-
       // Get current display sets for the viewport
       const currentDisplaySetUIDs = viewportGridService.getDisplaySetsUIDsForViewport(viewportId);
 
       // If the display set is not in the viewport, no need to remove it
       if (!currentDisplaySetUIDs.includes(displaySetInstanceUID)) {
         return;
+      }
+
+      // Check if it's a segmentation and handle accordingly
+      const isSegmentation = DERIVED_OVERLAY_MODALITIES.includes(displaySet.Modality);
+      if (isSegmentation) {
+        segmentationService.removeSegmentationRepresentations(viewportId, {
+          segmentationId: displaySetInstanceUID,
+        });
       }
 
       const updatedViewports = hangingProtocolService.getViewportsRequireUpdate(
@@ -659,9 +651,7 @@ const commandsModule = ({
       const displaySets = displaySetService.activeDisplaySets;
       const { UIModalService } = servicesManager.services;
 
-      const defaultDisplaySetInstanceUID =
-        displaySetInstanceUID || displaySetInstanceUIDs[0] || displaySets[0]?.displaySetInstanceUID;
-
+      const defaultDisplaySetInstanceUID = displaySetInstanceUID || displaySetInstanceUIDs[0];
       UIModalService.show({
         content: DicomTagBrowser,
         contentProps: {
@@ -734,11 +724,10 @@ const commandsModule = ({
         displaySetIndexToShow > -1 && displaySetIndexToShow < currentDisplaySets.length;
         displaySetIndexToShow += direction
       ) {
-        const nextDisplaySet = currentDisplaySets[displaySetIndexToShow];
-        if (nextDisplaySet.madeInClient) {
-          continue;
-        }
-        if (!excludeNonImageModalities || !nonImageModalities.includes(nextDisplaySet.Modality)) {
+        if (
+          !excludeNonImageModalities ||
+          !nonImageModalities.includes(currentDisplaySets[displaySetIndexToShow].Modality)
+        ) {
           break;
         }
       }
@@ -772,67 +761,6 @@ const commandsModule = ({
 
       setTimeout(() => actions.scrollActiveThumbnailIntoView(), 0);
     },
-
-    /**
-     * Creates a store function based on the data source type.
-     * @param dataSource - 'download', 'copyToClipboard', or a named data source
-     * @param defaultFileName - Default filename for download/clipboard
-     * @param defaultContentType - Default content type for clipboard
-     * @returns A store function, or null if no valid store exists
-     */
-    createStoreFunction: ({ dataSource, defaultFileName, defaultContentType }) => {
-      if (dataSource === 'download') {
-        return async dicom => {
-          const instances = Array.isArray(dicom) ? dicom : [dicom];
-          DicomMetadataStore.addInstances(instances, true);
-          if (instances.length !== 1) {
-            throw new Error('Download only supports a single DICOM instance');
-          }
-          const reportBlob = dcmjs.data.datasetToBlob(instances[0]);
-          downloadBlob(reportBlob, { filename: defaultFileName || 'dicom.dcm' });
-        };
-      }
-
-      if (dataSource === 'copyToClipboard') {
-        return async dicom => {
-          const instances = Array.isArray(dicom) ? dicom : [dicom];
-          DicomMetadataStore.addInstances(instances, true);
-          if (instances.length !== 1) {
-            throw new Error('Copy to clipboard only supports a single DICOM instance');
-          }
-          const reportBlob = dcmjs.data.datasetToBlob(instances[0]);
-          const type = defaultContentType || 'application/dicom';
-          await navigator.clipboard.write([
-            new ClipboardItem({ [type]: new Blob([reportBlob], { type }) }),
-          ]);
-        };
-      }
-
-      // DICOM STOW path — resolve the named data source
-      const dataSources = extensionManager.getDataSources(dataSource);
-      const resolvedDataSource = dataSources?.[0];
-      if (!resolvedDataSource?.store?.dicom) {
-        return null;
-      }
-
-      return async (dicom, { dicomDict } = {}) => {
-        const instances = Array.isArray(dicom) ? dicom : [dicom];
-        const config = resolvedDataSource.getConfig?.();
-        if (config?.wadoRoot) {
-          instances.forEach(instance => {
-            instance.wadoRoot = config.wadoRoot;
-          });
-        }
-        DicomMetadataStore.addInstances(instances, true);
-        for (const instance of instances) {
-          await resolvedDataSource.store.dicom(instance, null, dicomDict);
-        }
-        const studyUIDs = new Set(instances.map(i => i.StudyInstanceUID).filter(Boolean));
-        for (const uid of studyUIDs) {
-          resolvedDataSource.deleteStudyMetadataPromise(uid);
-        }
-      };
-    },
   };
 
   const definitions = {
@@ -861,7 +789,6 @@ const commandsModule = ({
     scrollActiveThumbnailIntoView: actions.scrollActiveThumbnailIntoView,
     addDisplaySetAsLayer: actions.addDisplaySetAsLayer,
     removeDisplaySetLayer: actions.removeDisplaySetLayer,
-    createStoreFunction: actions.createStoreFunction,
   };
 
   return {

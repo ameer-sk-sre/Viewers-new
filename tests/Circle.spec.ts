@@ -13,15 +13,10 @@ test('should display the circle tool', async ({
   viewportPageObject,
 }) => {
   await mainToolbarPageObject.measurementTools.circleROI.click();
-  const activeViewport = await viewportPageObject.active;
-  await activeViewport.clickAt([
+  await viewportPageObject.active.clickAt([
     { x: 480, y: 205 },
     { x: 488, y: 247 },
   ]);
   await DOMOverlayPageObject.viewport.measurementTracking.confirm.click();
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.circle.circleDisplayedCorrectly
-  );
+  await checkForScreenshot(page, page, screenShotPaths.circle.circleDisplayedCorrectly);
 });

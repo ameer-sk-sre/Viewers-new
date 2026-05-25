@@ -1,38 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ReactSelect, { components } from 'react-select';
 import { Icons } from '@ohif/ui-next';
 
 import './Select.css';
-
-/**
- * Reorder options so items that START with the search text come first
- * (shortest first), then items that only contain the text. This order is
- * passed to react-select so the focused/highlighted option (e.g. on Enter) is correct.
- */
-function orderOptionsByStartsWith(options, searchInput) {
-  if (!options?.length || !searchInput?.trim()) return options ?? [];
-  const input = searchInput.trim().toLowerCase();
-  const startsWith = options.filter(opt => {
-    const label = (opt.label ?? opt.value ?? '').toString().toLowerCase();
-    return label.startsWith(input);
-  });
-  const containsOnly = options.filter(opt => {
-    const label = (opt.label ?? opt.value ?? '').toString().toLowerCase();
-    return label.includes(input) && !label.startsWith(input);
-  });
-  const rest = options.filter(opt => {
-    const label = (opt.label ?? opt.value ?? '').toString().toLowerCase();
-    return !label.includes(input);
-  });
-  startsWith.sort((a, b) => {
-    const lenA = (a.label ?? a.value ?? '').toString().length;
-    const lenB = (b.label ?? b.value ?? '').toString().length;
-    return lenA - lenB;
-  });
-  return [...startsWith, ...containsOnly, ...rest];
-}
 
 const MultiValue = props => {
   const values = props.selectProps.value;
@@ -84,11 +56,6 @@ const Select = ({
   components = {},
   value = [],
 }) => {
-  const [filterInput, setFilterInput] = useState('');
-  const orderedOptions = isSearchable
-    ? orderOptionsByStartsWith(options, filterInput)
-    : options;
-
   const _noIconComponents = {
     DropdownIndicator: () => null,
     IndicatorSeparator: () => null,
@@ -125,11 +92,9 @@ const Select = ({
       hideSelectedOptions={hideSelectedOptions}
       components={_components}
       placeholder={placeholder}
-      options={orderedOptions}
+      options={options}
       blurInputOnSelect={true}
       menuPortalTarget={document.body}
-      onInputChange={isSearchable ? setFilterInput : undefined}
-      onMenuClose={isSearchable ? () => setFilterInput('') : undefined}
       styles={{
         menuPortal: base => ({ ...base, zIndex: 9999 }),
       }}

@@ -11,7 +11,6 @@ import { DropdownMenu, DropdownMenuTrigger } from '../DropdownMenu';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../Tooltip/Tooltip';
 import { ScrollArea } from '../../components';
 import { useDynamicMaxHeight } from '../../hooks/useDynamicMaxHeight';
-import { SegmentationLabel } from './SegmentationLabel';
 
 // The Header container component
 const SegmentationExpandedHeader = ({ children }: { children: React.ReactNode }) => {
@@ -54,11 +53,7 @@ const SegmentationExpandedDropdownMenu = ({ children }: { children: React.ReactN
 const SegmentationExpandedLabel = () => {
   const { segmentation } = useSegmentationExpanded('SegmentationExpandedLabel');
 
-  return (
-    <div className="pl-1.5">
-      <SegmentationLabel segmentation={segmentation} />
-    </div>
-  );
+  return <div className="pl-1.5">{segmentation.label}</div>;
 };
 
 // Info component - for the info tooltip
@@ -110,7 +105,7 @@ const SegmentationExpandedRoot = ({ children }) => {
 
   return (
     <ScrollArea
-      className={`bg-background space-y-px`}
+      className={`bg-bkg-low space-y-px`}
       showArrows={true}
     >
       <div

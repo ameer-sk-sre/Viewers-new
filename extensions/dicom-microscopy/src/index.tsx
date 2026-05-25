@@ -1,5 +1,5 @@
 import { id } from './id';
-import React, { Suspense, useCallback, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import getPanelModule from './getPanelModule';
 import getCommandsModule from './getCommandsModule';
 import getCustomizationModule from './getCustomizationModule';
@@ -81,18 +81,13 @@ const extension: Types.Extensions.Extension = {
         handleWidth: true,
       });
 
-      const setViewportActive = useCallback(
-        (viewportId: string) => {
-          viewportGridService.setActiveViewportId(viewportId);
-        },
-        [viewportGridService]
-      );
-
       return (
         <MicroscopyViewport
           key={displaySetsKey}
           activeViewportId={activeViewportId}
-          setViewportActive={setViewportActive}
+          setViewportActive={(viewportId: string) => {
+            viewportGridService.setActiveViewportId(viewportId);
+          }}
           viewportData={viewportOptions}
           resizeRef={resizeRef}
           {...props}
@@ -137,8 +132,8 @@ const extension: Types.Extensions.Extension = {
           return {
             disabled: false,
             className: isPrimaryActive
-              ? '!text-black bg-highlight'
-              : '!text-foreground/80 hover:!bg-muted hover:!text-highlight',
+              ? '!text-black bg-primary-light'
+              : '!text-common-bright hover:!bg-primary-dark hover:!text-primary-light',
             // Todo: isActive right now is used for nested buttons where the primary
             // button needs to be fully rounded (vs partial rounded) when active
             // otherwise it does not have any other use

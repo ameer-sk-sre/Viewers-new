@@ -30,11 +30,33 @@ export default function ToolButtonListWrapper({ buttonSection, id }: ToolButtonL
     return null;
   }
 
+  const items = toolbarButtons.map(button => button.componentProps);
+  const showInlineButtons = id === 'MeasurementTools' || id === 'MoreTools';
+
+  if (showInlineButtons) {
+    return (
+      <ToolButtonList className="flex items-center justify-center gap-1 max-w-[min(920px,calc(100vw-280px))]">
+        {items.map(item => (
+          <ToolButton
+            key={item.id}
+            {...item}
+            data-cy={`${id}-${item.id}-button`}
+            data-tool={item.id}
+            data-active={item.isActive}
+            onInteraction={({ itemId }) =>
+              onInteraction?.({ id, itemId, commands: item.commands })
+            }
+            className={item.className}
+          />
+        ))}
+      </ToolButtonList>
+    );
+  }
+
   const primary =
     toolbarButtons.find(button => button.componentProps.isActive)?.componentProps ||
     toolbarButtons[0].componentProps;
-
-  const items = toolbarButtons.map(button => button.componentProps);
+  const secondaryItems = items.filter(item => item.id !== primary.id);
 
   return (
     <ToolButtonList>

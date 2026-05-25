@@ -103,10 +103,9 @@ const CinePlayer: React.FC<CinePlayerProps> = ({
             onOpenChange={setPopoverOpen}
           >
             <PopoverTrigger asChild>
-              <div
-                role="button"
-                tabIndex={0}
-                className="h-full cursor-pointer border-none bg-transparent p-0"
+              <Button
+                variant="ghost"
+                className="h-full border-none bg-transparent p-0 hover:bg-transparent"
               >
                 <Numeric.Container
                   mode="stepper"
@@ -130,7 +129,7 @@ const CinePlayer: React.FC<CinePlayerProps> = ({
                     </div>
                   </Numeric.NumberStepper>
                 </Numeric.Container>
-              </div>
+              </Button>
             </PopoverTrigger>
             <PopoverContent
               side="bottom"

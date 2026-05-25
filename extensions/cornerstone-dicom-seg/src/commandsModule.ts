@@ -2,8 +2,9 @@ import dcmjs from 'dcmjs';
 import { classes, Types, utils } from '@ohif/core';
 import { cache, metaData } from '@cornerstonejs/core';
 import { segmentation as cornerstoneToolsSegmentation } from '@cornerstonejs/tools';
-import { adaptersRT, adaptersSEG } from '@cornerstonejs/adapters';
+import { adaptersRT, helpers, adaptersSEG } from '@cornerstonejs/adapters';
 import { createReportDialogPrompt, useUIStateStore } from '@ohif/extension-default';
+import { DicomMetadataStore } from '@ohif/core';
 
 import PROMPT_RESPONSES from '../../default/src/utils/_shared/PROMPT_RESPONSES';
 
@@ -28,11 +29,11 @@ const {
   },
 } = adaptersRT;
 
+const { downloadDICOMData } = helpers;
 
 const commandsModule = ({
   servicesManager,
   extensionManager,
-  commandsManager,
 }: Types.Extensions.ExtensionParams): Types.Extensions.CommandsModule => {
   const { segmentationService, displaySetService, viewportGridService } =
     servicesManager.services as AppTypes.Services;
@@ -193,11 +194,8 @@ const commandsModule = ({
       const generatedSegmentation = actions.generateSegmentation({
         segmentationId,
       });
-      const storeFn = commandsManager.runCommand('createStoreFunction', {
-        dataSource: 'download',
-        defaultFileName: `${segmentationInOHIF.label}.dcm`,
-      });
-      storeFn(generatedSegmentation.dataset);
+
+      downloadDICOMData(generatedSegmentation.dataset, `${segmentationInOHIF.label}`);
     },
     /**
      * Stores a segmentation based on the provided segmentationId into a specified data source.
@@ -219,10 +217,11 @@ const commandsModule = ({
       }
 
       const { label, predecessorImageId } = segmentation;
+      const defaultDataSource = dataSource ?? extensionManager.getActiveDataSource()[0];
 
       const {
         value: reportName,
-        dataSourceName,
+        dataSourceName: selectedDataSource,
         series,
         priorSeriesNumber,
         action,
@@ -232,58 +231,50 @@ const commandsModule = ({
         predecessorImageId,
         title: 'Store Segmentation',
         modality,
-        enableDownload: true,
       });
 
-      if (action !== PROMPT_RESPONSES.CREATE_REPORT) {
-        return;
-      }
+      if (action === PROMPT_RESPONSES.CREATE_REPORT) {
+        try {
+          const selectedDataSourceConfig = selectedDataSource
+            ? extensionManager.getDataSources(selectedDataSource)[0]
+            : defaultDataSource;
 
-      const defaultFileName =
-        modality === 'RTSTRUCT'
-          ? `rtss-${segmentationId}.dcm`
-          : `${label || 'segmentation'}.dcm`;
+          const args = {
+            segmentationId,
+            options: {
+              SeriesDescription: series ? undefined : reportName || label || 'Contour Series',
+              SeriesNumber: series ? undefined : 1 + priorSeriesNumber,
+              predecessorImageId: series,
+            },
+          };
+          const generatedDataAsync =
+            (modality === 'SEG' && actions.generateSegmentation(args)) ||
+            (modality === 'RTSTRUCT' && actions.generateContour(args));
+          const generatedData = await generatedDataAsync;
 
-      const storeFn = commandsManager.runCommand('createStoreFunction', {
-        dataSource: dataSourceName,
-        defaultFileName,
-      });
+          if (!generatedData || !generatedData.dataset) {
+            throw new Error('Error during segmentation generation');
+          }
 
-      if (!storeFn) {
-        throw new Error(`No valid store for dataSource: ${dataSourceName}`);
-      }
+          const { dataset: naturalizedReport } = generatedData;
 
-      try {
-        const args = {
-          segmentationId,
-          options: {
-            SeriesDescription: series ? undefined : reportName || label || 'Contour Series',
-            SeriesNumber: series ? undefined : 1 + priorSeriesNumber,
-            predecessorImageId: series,
-          },
-        };
-        const generatedDataAsync =
-          (modality === 'SEG' && actions.generateSegmentation(args)) ||
-          (modality === 'RTSTRUCT' && actions.generateContour(args));
-        const generatedData = await generatedDataAsync;
+          // DCMJS assigns a dummy study id during creation, and this can cause problems, so clearing it out
+          if (naturalizedReport.StudyID === 'No Study ID') {
+            naturalizedReport.StudyID = '';
+          }
 
-        if (!generatedData?.dataset) {
-          throw new Error('Error during segmentation generation');
+          await selectedDataSourceConfig.store.dicom(naturalizedReport);
+
+          // add the information for where we stored it to the instance as well
+          naturalizedReport.wadoRoot = selectedDataSourceConfig.getConfig().wadoRoot;
+
+          DicomMetadataStore.addInstances([naturalizedReport], true);
+
+          return naturalizedReport;
+        } catch (error) {
+          console.debug('Error storing segmentation:', error);
+          throw error;
         }
-
-        const { dataset: naturalizedReport } = generatedData;
-
-        // DCMJS assigns a dummy study id during creation, and this can cause problems, so clearing it out
-        if (naturalizedReport.StudyID === 'No Study ID') {
-          naturalizedReport.StudyID = '';
-        }
-
-        await storeFn(naturalizedReport, {});
-
-        return naturalizedReport;
-      } catch (error) {
-        console.debug('Error storing segmentation:', error);
-        throw error;
       }
     },
 
@@ -316,11 +307,14 @@ const commandsModule = ({
     downloadRTSS: async args => {
       const { dataset } = await actions.generateContour(args);
       const { InstanceNumber: instanceNumber = 1, SeriesInstanceUID: seriesUID } = dataset;
-      const storeFn = commandsManager.runCommand('createStoreFunction', {
-        dataSource: 'download',
-        defaultFileName: `rtss-${seriesUID}-${instanceNumber}.dcm`,
-      });
-      await storeFn(dataset);
+
+      try {
+        //Create a URL for the binary.
+        const filename = `rtss-${seriesUID}-${instanceNumber}.dcm`;
+        downloadDICOMData(dataset, filename);
+      } catch (e) {
+        console.warn(e);
+      }
     },
 
     toggleActiveSegmentationUtility: ({ itemId: buttonId }) => {

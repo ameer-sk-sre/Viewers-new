@@ -22,10 +22,8 @@ export default function fetchPaletteColorLookupTableData(item, tag, descriptorTa
 }
 
 function _getPaletteColor(paletteColorLookupTableData, lutDescriptor) {
-  // DICOM standard says to use 64k instead of 0 as 64k isn't specifiable in
-  // 2 bytes.
-  const numLutEntries = lutDescriptor[0] || 65536;
-  const bitsAllocated = lutDescriptor[2];
+  const numLutEntries = lutDescriptor[0];
+  const bits = lutDescriptor[2];
 
   if (!paletteColorLookupTableData) {
     return undefined;
@@ -34,11 +32,7 @@ function _getPaletteColor(paletteColorLookupTableData, lutDescriptor) {
   const arrayBufferToPaletteColorLUT = arraybuffer => {
     // Handle both ArrayBuffer and TypedArray inputs
     const buffer = arraybuffer.buffer || arraybuffer;
-    // See note in PS3.3 C7.6.3.1.5 around 8 bit data encoded as 16 bit
-    const data =
-      buffer.byteLength === 2 * numLutEntries || bitsAllocated > 8
-        ? new Uint16Array(buffer)
-        : new Uint8Array(buffer);
+    const data = bits === 16 ? new Uint16Array(buffer) : new Uint8Array(buffer);
     const lut = [];
 
     for (let i = 0; i < numLutEntries; i++) {
@@ -62,13 +56,6 @@ function _getPaletteColor(paletteColorLookupTableData, lutDescriptor) {
       console.log("Couldn't decode", paletteColorLookupTableData.InlineBinary, e);
       return undefined;
     }
-  }
-
-  const arrayPalette = Array.isArray(paletteColorLookupTableData)
-    ? paletteColorLookupTableData[0]
-    : paletteColorLookupTableData;
-  if (arrayPalette instanceof ArrayBuffer) {
-    return (paletteColorLookupTableData.palette = arrayBufferToPaletteColorLUT(arrayPalette));
   }
 
   if (paletteColorLookupTableData.retrieveBulkData) {

@@ -18,14 +18,11 @@ function ToolRowWrapper({ buttonSection, className = '', show = true }: ToolRowW
   }
 
   return (
-    <div className={`space-x-1} flex flex-row items-center ${className}`}>
+    <div className={`space-x-1 flex flex-row items-center ${className}`}>
       {toolbarButtons.map((button, index) => {
         const { id, Component, componentProps } = button;
         return (
-          <div
-            key={id || index}
-            className="flex-shrink-0"
-          >
+          <div key={id || index} className="flex-shrink-0">
             <Component
               {...componentProps}
               onInteraction={onInteraction}

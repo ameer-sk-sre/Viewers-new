@@ -39,8 +39,75 @@ services:
       # Config
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
       # Persist data
-      - ./volumes/orthanc-db/:/var/lib/orthanc/db/
+      - orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
     ports:
       - '4242:4242' # Orthanc REST API
       - '8042:8042' # Orthanc HTTP
+    environment:
+      - AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - VERBOSE=0 # Disable verbose logging in prod
+      - ORTHANC__MY_SQL__HOST=mysql
+      - ORTHANC__MY_SQL__USERNAME=orthanc
+      - ORTHANC__MY_SQL__PASSWORD=${MYSQL_PASSWORD}
+      - ORTHANC__MY_SQL__DATABASE=orthanc
+
+  mysql:
+    image: mysql:8.0.36
+    platform: linux/amd64
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --log_bin_trust_function_creators=1
+    environment:
+      MYSQL_DATABASE: orthanc
+      MYSQL_USER: orthanc
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+
+  # Authentication Proxy
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
+    restart: unless-stopped
+    environment:
+      - OAUTH2_PROXY_PROVIDER=oidc
+      - OAUTH2_PROXY_CLIENT_ID=prd-pacs
+      - OAUTH2_PROXY_CLIENT_SECRET=${OAUTH2_PROXY_CLIENT_SECRET}
+      - OAUTH2_PROXY_OIDC_ISSUER_URL=https://keyc.hrspace.in/realms/master
+      - OAUTH2_PROXY_COOKIE_SECRET=${OAUTH2_PROXY_COOKIE_SECRET}
+      - OAUTH2_PROXY_COOKIE_SECURE=true # MANDATORY FOR HTTPS
+      - OAUTH2_PROXY_HTTP_ADDRESS=0.0.0.0:4180
+      - OAUTH2_PROXY_UPSTREAMS=http://orthanc:8042/
+      - OAUTH2_PROXY_EMAIL_DOMAINS=*
+      - OAUTH2_PROXY_SET_XAUTHREQUEST=true
+      - OAUTH2_PROXY_REDIRECT_URL=https://pacs.medicoveronline.com/oauth2/callback
+      - OAUTH2_PROXY_SSL_INSECURE_SKIP_VERIFY=true
+      - OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      - OAUTH2_PROXY_USER_ID_CLAIM=sub
+      - OAUTH2_PROXY_INSECURE_OIDC_SKIP_ISSUER_VERIFICATION=true
+      - OAUTH2_PROXY_SCOPE=openid email profile
+      - OAUTH2_PROXY_SKIP_OIDC_DISCOVERY=true
+      - OAUTH2_PROXY_LOGIN_URL=https://keyc.hrspace.in/realms/master/protocol/openid-connect/auth
+      - OAUTH2_PROXY_REDEEM_URL=https://keyc.hrspace.in/realms/master/protocol/openid-connect/token
+      - OAUTH2_PROXY_OIDC_JWKS_URL=https://keyc.hrspace.in/realms/master/protocol/openid-connect/certs
+      - OAUTH2_PROXY_CODE_CHALLENGE_METHOD=S256
+      - OAUTH2_PROXY_SESSION_STORE_TYPE=redis
+      - OAUTH2_PROXY_REDIS_CONNECTION_URL=redis://redis:6379
+      - OAUTH2_PROXY_SIGN_IN_TITLE=Medicover Secure Login
+      - OAUTH2_PROXY_PROVIDER_DISPLAY_NAME=Medicover
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_COOKIE_SAMESITE=lax
+      - OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo-medicover.png
+      - OAUTH2_PROXY_WHITELIST_DOMAIN=.hrspace.in,.hrspace.in,.medicoveronline.com
+      - OAUTH2_PROXY_COOKIE_DOMAINS=.medicoveronline.com
+
+  volumes:
+  orthanc-storage:
+  mysql-data:
+    external: true
+    name: dicom_mysql-data
+
+  redis:
+    image: redis:7-alpine

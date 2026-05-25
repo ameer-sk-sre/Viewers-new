@@ -1,7 +1,6 @@
 import { CommandsManager, ExtensionManager } from '@ohif/core';
 import { callInputDialog } from '@ohif/extension-default';
 import styles from './utils/styles';
-import i18n from '@ohif/i18n';
 
 export default function getCommandsModule({
   servicesManager,
@@ -25,22 +24,16 @@ export default function getCommandsModule({
       }
     },
 
-    setLabel: async ({ uid }) => {
+    setLabel: ({ uid }) => {
       const roiAnnotation = microscopyService.getAnnotation(uid);
-      if (!roiAnnotation) {
-        return;
-      }
-      const value = await callInputDialog({
+      callInputDialog({
         uiDialogService,
-        title: i18n.t('Tools:Edit Measurement Label'),
-        placeholder: roiAnnotation.label || i18n.t('Tools:Enter new label'),
-        defaultValue: roiAnnotation.label,
+        defaultValue: '',
+        onSave: (value: string) => {
+          roiAnnotation.setLabel(value);
+          microscopyService.triggerRelabel(roiAnnotation);
+        },
       });
-
-      if (value != null) {
-        roiAnnotation.setLabel(value);
-        microscopyService.triggerRelabel(roiAnnotation);
-      }
     },
 
     setToolActive: ({ toolName, toolGroupId = 'MICROSCOPY' }) => {

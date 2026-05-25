@@ -15,7 +15,7 @@ const { structuredCloneWithFunctions } = utils;
  * This list used to include SM, for whole slide imaging, but this is now supported
  * by cornerstone.  Others of these may get added.
  */
-export const NON_IMAGE_MODALITIES = ['SEG', 'RTSTRUCT', 'RTPLAN', 'PR', 'SR'];
+export const NON_IMAGE_MODALITIES = ['ECG', 'SEG', 'RTSTRUCT', 'RTPLAN', 'PR', 'SR'];
 
 export const ohif = {
   layout: '@ohif/extension-default.layoutTemplateModule.viewerLayout',
@@ -45,10 +45,6 @@ export const dicomsr = {
 export const dicomvideo = {
   sopClassHandler: '@ohif/extension-dicom-video.sopClassHandlerModule.dicom-video',
   viewport: '@ohif/extension-dicom-video.viewportModule.dicom-video',
-};
-
-export const dicomecg = {
-  sopClassHandler: '@ohif/extension-cornerstone.sopClassHandlerModule.DicomEcgSopClassHandler',
 };
 
 export const dicompdf = {
@@ -90,7 +86,6 @@ export const extensionDependencies = {
 
 export const sopClassHandlers = [
   dicomvideo.sopClassHandler,
-  dicomecg.sopClassHandler,
   dicomSeg.sopClassHandler,
   dicomPmap.sopClassHandler,
   ohif.sopClassHandler,
@@ -296,7 +291,6 @@ export const basicLayout = {
           ohif.sopClassHandler,
           dicomvideo.sopClassHandler,
           ohif.wsiSopClassHandler,
-          dicomecg.sopClassHandler,
         ],
       },
       {

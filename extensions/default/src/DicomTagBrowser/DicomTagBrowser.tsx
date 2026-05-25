@@ -3,14 +3,7 @@ import moment from 'moment';
 import React, { useState, useMemo, useCallback } from 'react';
 import { classes, Types } from '@ohif/core';
 import { InputFilter } from '@ohif/ui-next';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  Slider,
-} from '@ohif/ui-next';
+import { Select, SelectTrigger, SelectContent, SelectItem, Slider } from '@ohif/ui-next';
 
 import DicomTagTable from './DicomTagTable';
 import './DicomTagBrowser.css';
@@ -133,7 +126,7 @@ const DicomTagBrowser = ({
   return (
     <div className="dicom-tag-browser-content bg-muted">
       <div className="mb-6 flex flex-row items-start pl-1">
-        <div className="flex w-full flex-row items-start gap-6">
+        <div className="flex w-full flex-row items-start gap-4">
           <div className="flex w-1/3 flex-col">
             <span className="text-muted-foreground flex h-6 items-center pb-2 text-base">
               Series
@@ -142,11 +135,9 @@ const DicomTagBrowser = ({
               value={selectedDisplaySetInstanceUID}
               onValueChange={value => onSelectChange({ value })}
             >
-              <SelectTrigger data-cy="dicom-tag-series-select-trigger">
-                <SelectValue data-cy="dicom-tag-series-select-value">
-                  {displaySetList.find(ds => ds.value === selectedDisplaySetInstanceUID)?.label ||
-                    'Select Series'}
-                </SelectValue>
+              <SelectTrigger>
+                {displaySetList.find(ds => ds.value === selectedDisplaySetInstanceUID)?.label ||
+                  'Select Series'}
               </SelectTrigger>
               <SelectContent>
                 {displaySetList.map(item => {
@@ -176,7 +167,7 @@ const DicomTagBrowser = ({
                 min={1}
                 max={activeDisplaySet?.images?.length}
                 step={1}
-                className="pt-3"
+                className="pt-4"
               />
             </div>
           )}

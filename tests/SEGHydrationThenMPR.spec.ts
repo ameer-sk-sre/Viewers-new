@@ -12,7 +12,6 @@ test('should properly display MPR for MR', async ({
   leftPanelPageObject,
   mainToolbarPageObject,
   rightPanelPageObject,
-  viewportPageObject,
 }) => {
   await rightPanelPageObject.toggle();
   await leftPanelPageObject.loadSeriesByDescription('SEG');
@@ -20,18 +19,14 @@ test('should properly display MPR for MR', async ({
   await DOMOverlayPageObject.viewport.segmentationHydration.yes.click();
 
   await page.waitForTimeout(5000);
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.segHydrationThenMPR.segPostHydration
-  );
+  await checkForScreenshot(page, page, screenShotPaths.segHydrationThenMPR.segPostHydration);
 
   await mainToolbarPageObject.layoutSelection.axialPrimary.click();
 
   await page.waitForTimeout(5000);
   await checkForScreenshot(
     page,
-    viewportPageObject.grid,
+    page,
     screenShotPaths.segHydrationThenMPR.segPostHydrationMPRAxialPrimary
   );
 });

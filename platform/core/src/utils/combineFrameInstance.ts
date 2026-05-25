@@ -32,7 +32,7 @@ const combineFrameInstance = (frame, instance) => {
 
   if (
     (PerFrameFunctionalGroupsSequence && SharedFunctionalGroupsSequence) ||
-    hasDetectorButMissingSpatialInfo || NumberOfFrames > 1
+    hasDetectorButMissingSpatialInfo
   ) {
     // this is to fix NM multiframe datasets with position and orientation
     // information inside DetectorInformationSequence

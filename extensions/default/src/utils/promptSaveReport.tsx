@@ -35,19 +35,21 @@ async function promptSaveReport({ servicesManager, commandsManager, extensionMan
       minSeriesNumber: 3000,
       extensionManager,
       servicesManager,
-      enableDownload: true,
     });
 
     if (promptResult.action === PROMPT_RESPONSES.CREATE_REPORT) {
-      const { series, priorSeriesNumber, value: reportName, dataSourceName } = promptResult;
+      const dataSources = extensionManager.getDataSources(promptResult.dataSourceName);
+      const dataSource = dataSources[0];
+
+      const { series, priorSeriesNumber, value: reportName } = promptResult;
       const SeriesDescription = reportName || defaultSaveTitle;
 
-      const getReport = async () =>
-        commandsManager.runCommand(
+      const getReport = async () => {
+        return commandsManager.runCommand(
           'storeMeasurements',
           {
             measurementData,
-            dataSource: dataSourceName,
+            dataSource,
             additionalFindingTypes: ['ArrowAnnotate'],
             options: {
               SeriesDescription,
@@ -57,12 +59,12 @@ async function promptSaveReport({ servicesManager, commandsManager, extensionMan
           },
           'CORNERSTONE_STRUCTURED_REPORT'
         );
-
+      };
       displaySetInstanceUIDs = await createReportAsync({
         servicesManager,
         getReport,
       });
-    } else if (promptResult.action === PROMPT_RESPONSES.CANCEL) {
+    } else if (promptResult.action === RESPONSE.CANCEL) {
       // Do nothing
     }
 

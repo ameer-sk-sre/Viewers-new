@@ -39,25 +39,11 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
   const { t } = useTranslation();
   const { show } = useModal();
 
-  const AboutModal = customizationService.getCustomization(
-    'ohif.aboutModal'
-  ) as Types.MenuComponentCustomization;
-
   const UserPreferencesModal = customizationService.getCustomization(
     'ohif.userPreferencesModal'
   ) as Types.MenuComponentCustomization;
 
   const menuOptions = [
-    {
-      title: AboutModal?.menuTitle ?? t('Header:About'),
-      icon: 'info',
-      onClick: () =>
-        show({
-          content: AboutModal,
-          title: AboutModal?.title ?? t('AboutModal:About OHIF Viewer'),
-          containerClassName: AboutModal?.containerClassName ?? 'max-w-md',
-        }),
-    },
     {
       title: UserPreferencesModal.menuTitle ?? t('Header:Preferences'),
       icon: 'settings',
@@ -82,49 +68,49 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
   }
 
   return (
-    <Header
-      menuOptions={menuOptions}
-      isReturnEnabled={!!appConfig.showStudyList}
-      onClickReturnButton={onClickReturnButton}
-      WhiteLabeling={appConfig.whiteLabeling}
-      Secondary={<Toolbar buttonSection="secondary" />}
-      PatientInfo={
-        appConfig.showPatientInfo !== PatientInfoVisibility.DISABLED && (
-          <HeaderPatientInfo
-            servicesManager={servicesManager}
-            appConfig={appConfig}
-          />
-        )
-      }
-      UndoRedo={
-        <div className="text-primary flex cursor-pointer items-center">
-          <Button
-            variant="ghost"
-            className="hover:bg-muted"
-            data-cy="undo-btn"
-            onClick={() => {
-              commandsManager.run('undo');
-            }}
-          >
-            <Icons.Undo className="" />
-          </Button>
-          <Button
-            variant="ghost"
-            className="hover:bg-muted"
-            data-cy="redo-btn"
-            onClick={() => {
-              commandsManager.run('redo');
-            }}
-          >
-            <Icons.Redo className="" />
-          </Button>
+    <div className="absolute inset-x-0 top-0 z-30">
+      <Header
+        menuOptions={menuOptions}
+        isReturnEnabled={!!appConfig.showStudyList}
+        onClickReturnButton={onClickReturnButton}
+        WhiteLabeling={appConfig.whiteLabeling}
+        Secondary={<Toolbar buttonSection="secondary" />}
+        PatientInfo={
+          appConfig.showPatientInfo !== PatientInfoVisibility.DISABLED && (
+            <HeaderPatientInfo
+              servicesManager={servicesManager}
+              appConfig={appConfig}
+            />
+          )
+        }
+        UndoRedo={
+          <div className="text-primary flex cursor-pointer items-center">
+            <Button
+              variant="ghost"
+              className="hover:bg-primary-dark"
+              onClick={() => {
+                commandsManager.run('undo');
+              }}
+            >
+              <Icons.Undo className="" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="hover:bg-primary-dark"
+              onClick={() => {
+                commandsManager.run('redo');
+              }}
+            >
+              <Icons.Redo className="" />
+            </Button>
+          </div>
+        }
+      >
+        <div className="relative flex justify-start gap-[4px] flex-wrap">
+          <Toolbar buttonSection="primary" />
         </div>
-      }
-    >
-      <div className="relative flex justify-center gap-[4px]">
-        <Toolbar buttonSection="primary" />
-      </div>
-    </Header>
+      </Header>
+    </div>
   );
 }
 

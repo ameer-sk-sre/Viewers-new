@@ -1,10 +1,4 @@
-import {
-  checkForScreenshot,
-  screenShotPaths,
-  test,
-  visitStudy,
-  waitForViewportRenderCycle,
-} from './utils';
+import { checkForScreenshot, screenShotPaths, test, visitStudy } from './utils';
 
 test.beforeEach(async ({ page }) => {
   const studyInstanceUID = '1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5';
@@ -23,8 +17,7 @@ test('should display the arrow tool and allow free-form text to be entered', asy
 
   await mainToolbarPageObject.measurementTools.arrowAnnotate.click();
 
-  const activeViewport = await viewportPageObject.active;
-  await activeViewport.clickAt([
+  await viewportPageObject.active.clickAt([
     { x: 164, y: 234 },
     { x: 344, y: 232 },
   ]);
@@ -33,11 +26,9 @@ test('should display the arrow tool and allow free-form text to be entered', asy
     'Ringo Starr was the drummer for The Beatles'
   );
 
-  const viewportRenderCycle = waitForViewportRenderCycle(page);
-
   await DOMOverlayPageObject.viewport.measurementTracking.confirm.click();
 
-  await viewportRenderCycle;
+  await page.waitForTimeout(2000);
 
   await checkForScreenshot({
     page,
@@ -47,9 +38,11 @@ test('should display the arrow tool and allow free-form text to be entered', asy
 
   // Now edit the arrow text and the label should not change.
 
-  await activeViewport.doubleClickAt({ x: 164, y: 234 });
+  await viewportPageObject.active.doubleClickAt({ x: 164, y: 234 });
 
   await DOMOverlayPageObject.dialog.input.fillAndSave('Neil Peart was the drummer for Rush');
+
+  await page.waitForTimeout(2000);
 
   await checkForScreenshot({
     page,
@@ -62,6 +55,8 @@ test('should display the arrow tool and allow free-form text to be entered', asy
   await rightPanelPageObject.measurementsPanel.panel
     .nthMeasurement(0)
     .actions.rename('Drummer annotation arrow');
+
+  await page.waitForTimeout(2000);
 
   await checkForScreenshot({
     page,

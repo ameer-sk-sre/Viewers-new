@@ -1,6 +1,5 @@
 import { utils, Types as OhifTypes } from '@ohif/core';
 import i18n from '@ohif/i18n';
-import { segmentation as cstSegmentation } from '@cornerstonejs/tools';
 
 import { SOPClassHandlerId } from './id';
 import loadRTStruct from './loadRTStruct';
@@ -8,6 +7,8 @@ import loadRTStruct from './loadRTStruct';
 const { sopClassDictionary } = utils;
 
 const sopClassUids = [sopClassDictionary.RTStructureSetStorage];
+
+const cachedRTStructsSEG = new Set<string>();
 
 const loadPromises = {};
 
@@ -56,7 +57,6 @@ function _getDisplaySetsFromSeries(
     StudyInstanceUID,
     SOPClassHandlerId,
     SOPClassUID,
-    FrameOfReferenceUID: null,
     referencedImages: null,
     referencedSeriesInstanceUID: null,
     referencedDisplaySetInstanceUID: null,
@@ -96,9 +96,6 @@ function _getDisplaySetsFromSeries(
   displaySet.referencedImages = instance.ReferencedSeriesSequence.ReferencedInstanceSequence;
   displaySet.referencedSeriesInstanceUID = referencedSeries.SeriesInstanceUID;
 
-  displaySet.FrameOfReferenceUID =
-    instance.ReferencedFrameOfReferenceSequence?.[0]?.FrameOfReferenceUID;
-
   const { displaySetService } = servicesManager.services;
   const referencedDisplaySets =
     displaySetService.getDisplaySetsForReferences(referencedSeriesSequence);
@@ -117,7 +114,6 @@ function _getDisplaySetsFromSeries(
         if (addedDisplaySet.SeriesInstanceUID === displaySet.referencedSeriesInstanceUID) {
           displaySet.referencedDisplaySetInstanceUID = addedDisplaySet.displaySetInstanceUID;
           displaySet.isReconstructable = addedDisplaySet.isReconstructable;
-          displaySet.FrameOfReferenceUID = addedDisplaySet.FrameOfReferenceUID;
           unsubscribe();
         }
       }
@@ -126,7 +122,6 @@ function _getDisplaySetsFromSeries(
     const [referencedDisplaySet] = referencedDisplaySets;
     displaySet.referencedDisplaySetInstanceUID = referencedDisplaySet.displaySetInstanceUID;
     displaySet.isReconstructable = referencedDisplaySet.isReconstructable;
-    displaySet.FrameOfReferenceUID = referencedDisplaySet.FrameOfReferenceUID;
   }
 
   displaySet.load = ({ headers, createSegmentation = true }) =>
@@ -148,12 +143,22 @@ function _load(
   if (
     (rtDisplaySet.loading || rtDisplaySet.isLoaded) &&
     loadPromises[SOPInstanceUID] &&
-    _segmentationExists(rtDisplaySet)
+    cachedRTStructsSEG.has(rtDisplaySet.displaySetInstanceUID)
   ) {
     return loadPromises[SOPInstanceUID];
   }
 
   rtDisplaySet.loading = true;
+
+  const { unsubscribe } = segmentationService.subscribe(
+    segmentationService.EVENTS.SEGMENTATION_LOADING_COMPLETE,
+    (evt: { rtDisplaySet: { displaySetInstanceUID: string } }) => {
+      if (evt.rtDisplaySet?.displaySetInstanceUID === rtDisplaySet.displaySetInstanceUID) {
+        cachedRTStructsSEG.add(rtDisplaySet.displaySetInstanceUID);
+        unsubscribe();
+      }
+    }
+  );
 
   // We don't want to fire multiple loads, so we'll wait for the first to finish
   // and also return the same promise to any other callers.
@@ -212,10 +217,6 @@ function _deriveReferencedSeriesSequenceFromFrameOfReferenceSequence(
   });
 
   return ReferencedSeriesSequence;
-}
-
-function _segmentationExists(segDisplaySet) {
-  return !!cstSegmentation.state.getSegmentation(segDisplaySet.displaySetInstanceUID);
 }
 
 function getSopClassHandlerModule(params: OhifTypes.Extensions.ExtensionParams) {

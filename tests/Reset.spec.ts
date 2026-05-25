@@ -6,18 +6,9 @@ test.beforeEach(async ({ page }) => {
   await visitStudy(page, studyInstanceUID, mode, 2000);
 });
 
-test('should reset the image to its original state', async ({
-  page,
-  mainToolbarPageObject,
-  viewportPageObject,
-}) => {
+test('should reset the image to its original state', async ({ page, mainToolbarPageObject }) => {
   await mainToolbarPageObject.moreTools.rotateRight.click();
   await mainToolbarPageObject.moreTools.invert.click();
   await mainToolbarPageObject.moreTools.reset.click();
-
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.reset.resetDisplayedCorrectly
-  );
+  await checkForScreenshot(page, page, screenShotPaths.reset.resetDisplayedCorrectly);
 });

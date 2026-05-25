@@ -9,7 +9,7 @@ import SidePanelWithServices from '../Components/SidePanelWithServices';
 import { Onboarding, ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@ohif/ui-next';
 import useResizablePanels from './ResizablePanelsHook';
 
-const resizableHandleClassName = 'mt-[1px] bg-background';
+const resizableHandleClassName = 'mt-[1px] bg-black';
 
 function ViewerLayout({
   // From Extension Module Params
@@ -79,11 +79,11 @@ function ViewerLayout({
    * is sized to our viewport.
    */
   useEffect(() => {
-    document.body.classList.add('bg-background');
+    document.body.classList.add('bg-black');
     document.body.classList.add('overflow-hidden');
 
     return () => {
-      document.body.classList.remove('bg-background');
+      document.body.classList.remove('bg-black');
       document.body.classList.remove('overflow-hidden');
     };
   }, []);
@@ -150,7 +150,7 @@ function ViewerLayout({
   const viewportComponents = viewports.map(getViewportComponentData);
 
   return (
-    <div>
+    <div className="relative">
       <ViewerHeader
         hotkeysManager={hotkeysManager}
         extensionManager={extensionManager}
@@ -158,11 +158,11 @@ function ViewerLayout({
         appConfig={appConfig}
       />
       <div
-        className="relative flex w-full flex-row flex-nowrap items-stretch overflow-hidden bg-background"
-        style={{ height: 'calc(100vh - 52px' }}
+        className="relative flex w-full flex-row flex-nowrap items-stretch overflow-hidden bg-black pt-[101px]"
+        style={{ height: '100vh' }}
       >
         <React.Fragment>
-          {showLoadingIndicator && <LoadingIndicatorProgress className="h-full w-full bg-background" />}
+          {showLoadingIndicator && <LoadingIndicatorProgress className="h-full w-full bg-black" />}
           <ResizablePanelGroup {...resizablePanelGroupProps}>
             {/* LEFT SIDEPANELS */}
             {hasLeftPanels ? (
@@ -186,7 +186,7 @@ function ViewerLayout({
             <ResizablePanel {...resizableViewportGridPanelProps}>
               <div className="flex h-full flex-1 flex-col">
                 <div
-                  className="relative flex h-full flex-1 items-center justify-center overflow-hidden bg-background"
+                  className="relative flex h-full flex-1 items-center justify-center overflow-hidden bg-black"
                   onMouseEnter={handleMouseEnter}
                 >
                   <ViewportGridComp

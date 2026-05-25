@@ -206,7 +206,6 @@ const ActionsSecondary = React.forwardRef<HTMLDivElement, InputDialogActionButto
     return (
       <div
         ref={ref}
-        data-cy="input-dialog-cancel-button"
         {...props}
       >
         <FooterAction.Secondary

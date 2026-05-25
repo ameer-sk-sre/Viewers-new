@@ -84,7 +84,7 @@ const LineChart = ({
   return (
     <div
       className={classnames(
-        'LineChart text-foreground',
+        'LineChart text-white',
         {
           [`w-[${widthProp}px]`]: !!widthProp,
           [`h-[${heightProp}px]`]: !!heightProp,

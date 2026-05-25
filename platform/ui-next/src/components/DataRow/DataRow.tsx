@@ -182,7 +182,6 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
           <div
             key={`empty-${indent}`}
             className="h-2"
-            data-cy="data-row-detail-line-empty"
           ></div>
         );
       }
@@ -191,7 +190,6 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
         <div
           key={cleanText}
           className="whitespace-pre-wrap"
-          data-cy="data-row-detail-line"
         >
           {indentation}
           <span className="font-medium">{cleanText}</span>
@@ -199,17 +197,14 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
       );
     };
 
-    const renderDetails = (details: string[], variant: 'primary' | 'secondary') => {
+    const renderDetails = (details: string[]) => {
       const visibleLines = details.slice(0, 4);
       const hiddenLines = details.slice(4);
 
       return (
         <Tooltip>
           <TooltipTrigger asChild>
-            <div
-              className="cursor-help"
-              data-cy={`data-row-details-${variant}`}
-            >
+            <div className="cursor-help">
               <div className="flex flex-col space-y-1">
                 {visibleLines.map((line, lineIndex) =>
                   renderDetailText(line, line.startsWith('  ') ? 1 : 0)
@@ -260,7 +255,7 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
           {/* Number Box */}
           {number !== null && (
             <div
-              className={`flex h-7 max-h-7 w-7 flex-shrink-0 items-center justify-center rounded-l border-r border-background text-base ${
+              className={`flex h-7 max-h-7 w-7 flex-shrink-0 items-center justify-center rounded-l border-r border-black text-base ${
                 isSelected ? 'bg-highlight text-black' : 'bg-muted text-muted-foreground'
               } overflow-hidden`}
             >
@@ -285,7 +280,6 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
-                    data-cy="data-row-title"
                     className={`cursor-default text-base ${
                       isSelected ? 'text-highlight' : 'text-muted-foreground'
                     } [overflow:hidden] [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]`}
@@ -302,7 +296,6 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
               </Tooltip>
             ) : (
               <span
-                data-cy="data-row-title"
                 className={`text-base ${
                   isSelected ? 'text-highlight' : 'text-muted-foreground'
                 } [overflow:hidden] [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]`}
@@ -423,15 +416,12 @@ const DataRowComponent = React.forwardRef<HTMLDivElement, DataRowProps>(
 
         {/* Details Section */}
         {details && (details.primary?.length > 0 || details.secondary?.length > 0) && (
-          <div
-            className="ml-7 px-2 py-2"
-            data-cy="data-row-details"
-          >
+          <div className="ml-7 px-2 py-2">
             <div className="text-secondary-foreground flex items-center gap-1 text-base leading-normal">
-              {details.primary?.length > 0 && renderDetails(details.primary, 'primary')}
+              {details.primary?.length > 0 && renderDetails(details.primary)}
               {details.secondary?.length > 0 && (
                 <div className="text-muted-foreground ml-auto text-sm">
-                  {renderDetails(details.secondary, 'secondary')}
+                  {renderDetails(details.secondary)}
                 </div>
               )}
             </div>
@@ -511,7 +501,7 @@ const StatusError: React.FC<{ tooltip?: string }> = ({ tooltip }) => (
 const StatusInfo: React.FC<{ tooltip?: string }> = ({ tooltip }) => (
   <StatusIndicator
     tooltip={tooltip}
-    icon={<Icons.Info className="text-primary h-4 w-4" />}
+    icon={<Icons.Info className="h-4 w-4 text-blue-500" />}
     defaultTooltip="Info"
   />
 );

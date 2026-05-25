@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Icons,
@@ -42,10 +42,6 @@ function ViewportDataOverlayMenu({ viewportId }: withAppTypes<{ viewportId: stri
     useState(overlayDisplaySets);
 
   const [thresholdOpacityEnabled, setThresholdOpacityEnabled] = useState(false);
-
-  useEffect(() => {
-    setOptimisticOverlayDisplaySets(overlayDisplaySets);
-  }, [backgroundDisplaySet?.displaySetInstanceUID, overlayDisplaySets]);
 
   /**
    * Change the background display set
@@ -486,10 +482,7 @@ function ViewportDataOverlayMenu({ viewportId }: withAppTypes<{ viewportId: stri
               }
             }}
           >
-            <SelectTrigger
-              className="flex-1"
-              data-cy={`overlay-background-ds-select-${viewportId}`}
-            >
+            <SelectTrigger className="flex-1">
               <SelectValue>
                 {(
                   backgroundDisplaySet?.SeriesDescription ||

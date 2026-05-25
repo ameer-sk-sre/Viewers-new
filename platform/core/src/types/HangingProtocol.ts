@@ -24,13 +24,6 @@ export type DisplaySetAndViewportOptions = {
   displaySetOptions: DisplaySetOptions;
 };
 
-export interface ViewportUpdate {
-  viewportId?: string;
-  displaySetInstanceUIDs: string[];
-  viewportOptions?: ViewportOptions;
-  displaySetOptions?: DisplaySetOptions[];
-}
-
 export type DisplayArea = {
   type?: 'SCALE' | 'FIT';
   scale?: number;

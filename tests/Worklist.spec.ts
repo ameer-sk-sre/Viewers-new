@@ -1,4 +1,5 @@
-import { test, checkForScreenshot, screenShotPaths } from './utils';
+import { test } from 'playwright-test-coverage';
+import { checkForScreenshot, screenShotPaths } from './utils';
 
 test.beforeEach(async ({ page }) => {
   await page.goto(`/?datasources=ohif`);

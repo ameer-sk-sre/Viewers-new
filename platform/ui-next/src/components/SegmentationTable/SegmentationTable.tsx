@@ -44,7 +44,6 @@ export const SegmentationTableRoot = (props: SegmentationTableProps) => {
     children,
     showConfig: externalShowConfig,
     selectedSegmentationIdForType,
-    segmentationRepresentationTypes,
     ...contextProps
   } = props;
 
@@ -96,10 +95,6 @@ export const SegmentationTableRoot = (props: SegmentationTableProps) => {
     }
   };
 
-  const dataCyTypeSuffix = segmentationRepresentationTypes
-    ? `-${segmentationRepresentationTypes[0]}`
-    : '';
-
   return (
     <SegmentationTableProvider
       value={{
@@ -117,7 +112,6 @@ export const SegmentationTableRoot = (props: SegmentationTableProps) => {
         activeSegmentation,
         activeRepresentation,
         selectedSegmentationIdForType,
-        segmentationRepresentationTypes,
         ...contextProps,
         setShowConfig: toggleShowConfig,
       }}
@@ -126,10 +120,7 @@ export const SegmentationTableRoot = (props: SegmentationTableProps) => {
         <PanelSection.Header className="flex items-center justify-between">
           <span>{t(title)}</span>
           {hasConfigComponent && (
-            <div
-              className="ml-auto mr-2"
-              data-cy={`segmentation-config-toggle${dataCyTypeSuffix}`}
-            >
+            <div className="ml-auto mr-2">
               <Icons.Settings
                 className="text-primary h-4 w-4"
                 onClick={e => {

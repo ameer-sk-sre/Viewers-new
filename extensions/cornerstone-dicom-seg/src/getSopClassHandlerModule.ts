@@ -30,7 +30,6 @@ function _getDisplaySetsFromSeries(
     SeriesDate,
     StructureSetDate,
     SOPClassUID,
-    FrameOfReferenceUID,
     wadoRoot,
     wadoUri,
     wadoUriRoot,
@@ -50,7 +49,6 @@ function _getDisplaySetsFromSeries(
     StudyInstanceUID,
     SOPClassHandlerId,
     SOPClassUID,
-    FrameOfReferenceUID,
     referencedImages: null,
     referencedSeriesInstanceUID: null,
     referencedDisplaySetInstanceUID: null,
@@ -106,7 +104,6 @@ function _getDisplaySetsFromSeries(
         if (addedDisplaySet.SeriesInstanceUID === displaySet.referencedSeriesInstanceUID) {
           displaySet.referencedDisplaySetInstanceUID = addedDisplaySet.displaySetInstanceUID;
           displaySet.isReconstructable = addedDisplaySet.isReconstructable;
-          displaySet.FrameOfReferenceUID = addedDisplaySet.FrameOfReferenceUID;
           unsubscribe();
         }
       }
@@ -114,7 +111,6 @@ function _getDisplaySetsFromSeries(
   } else {
     displaySet.referencedDisplaySetInstanceUID = referencedDisplaySet.displaySetInstanceUID;
     displaySet.isReconstructable = referencedDisplaySet.isReconstructable;
-    displaySet.FrameOfReferenceUID = referencedDisplaySet.FrameOfReferenceUID;
   }
 
   displaySet.load = async ({ headers }) =>

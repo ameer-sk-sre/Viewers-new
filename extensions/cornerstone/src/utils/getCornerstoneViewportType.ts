@@ -7,7 +7,6 @@ const ORTHOGRAPHIC = 'orthographic';
 const VOLUME_3D = 'volume3d';
 const VIDEO = 'video';
 const WHOLESLIDE = 'wholeslide';
-const ECG = 'ecg';
 
 export default function getCornerstoneViewportType(
   viewportType: string,
@@ -26,10 +25,6 @@ export default function getCornerstoneViewportType(
     return Enums.ViewportType.WHOLE_SLIDE;
   }
 
-  if (lowerViewportType === ECG) {
-    return Enums.ViewportType.ECG;
-  }
-
   if (lowerViewportType === VOLUME || lowerViewportType === ORTHOGRAPHIC) {
     return Enums.ViewportType.ORTHOGRAPHIC;
   }
@@ -39,6 +34,6 @@ export default function getCornerstoneViewportType(
   }
 
   throw new Error(
-    `Invalid viewport type: ${viewportType}. Valid types are: stack, volume, video, wholeslide, ecg`
+    `Invalid viewport type: ${viewportType}. Valid types are: stack, volume, video, wholeslide`
   );
 }

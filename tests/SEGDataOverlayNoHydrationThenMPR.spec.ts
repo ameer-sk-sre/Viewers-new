@@ -14,22 +14,22 @@ test('should launch MPR with unhydrated SEG chosen from the data overlay menu', 
   viewportPageObject,
 }) => {
   await rightPanelPageObject.toggle();
-  const dataOverlayPageObject = (await viewportPageObject.getById('default')).overlayMenu
-    .dataOverlay;
-  await dataOverlayPageObject.toggle();
-  await dataOverlayPageObject.addSegmentation('Segmentation');
+  await viewportPageObject.getById('default').overlayMenu.dataOverlay.toggle();
+  await viewportPageObject
+    .getById('default')
+    .overlayMenu.dataOverlay.addSegmentation('Segmentation');
 
   // Adding an overlay should not show the LOAD button.
   assertNumberOfModalityLoadBadges({ page, expectedCount: 0 });
 
   // Hide the overlay menu.
-  await dataOverlayPageObject.toggle();
+  await viewportPageObject.getById('default').overlayMenu.dataOverlay.toggle();
 
   await page.waitForTimeout(5000);
 
   await checkForScreenshot(
     page,
-    viewportPageObject.grid,
+    page,
     screenShotPaths.segDataOverlayNoHydrationThenMPR.segDataOverlayNoHydrationPreMPR
   );
 
@@ -39,7 +39,7 @@ test('should launch MPR with unhydrated SEG chosen from the data overlay menu', 
 
   await checkForScreenshot(
     page,
-    viewportPageObject.grid,
+    page,
     screenShotPaths.segDataOverlayNoHydrationThenMPR.segDataOverlayNoHydrationPostMPR
   );
 

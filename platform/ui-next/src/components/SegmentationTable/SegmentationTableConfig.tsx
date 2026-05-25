@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger } from '../Tabs';
+import { Slider } from '../Slider';
 import { Icons } from '../Icons';
 import { Switch } from '../Switch';
 import { Label } from '../Label';
-import Numeric from '../Numeric';
+import { Input } from '../Input';
 import { useSegmentationTableContext } from './contexts';
 
 export const SegmentationTableConfig: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
@@ -32,14 +33,10 @@ export const SegmentationTableConfig: React.FC<{ children?: React.ReactNode }> =
     return null;
   }
 
-  const dataCyTypeSuffix = segmentationRepresentationTypes
-    ? `-${segmentationRepresentationTypes[0]}`
-    : '';
-
   return (
     <div className="bg-muted mb-0.5 space-y-2 rounded-b px-1.5 pt-0.5 pb-3">
       <div className="my-1 flex items-center justify-between">
-        <span className="text-muted-foreground text-xs">
+        <span className="text-aqua-pale text-xs">
           {t('Show')}:{' '}
           {renderFill && renderOutline
             ? t('Fill & Outline')
@@ -90,52 +87,49 @@ export const SegmentationTableConfig: React.FC<{ children?: React.ReactNode }> =
           <Label className="text-muted-foreground w-14 flex-none whitespace-nowrap text-xs">
             {t('Opacity')}
           </Label>
-          <div
+          <Slider
             className="mx-1 flex-1"
-            data-cy={`segmentation-config-opacity${dataCyTypeSuffix}`}
-          >
-            <Numeric.Container
-              mode="singleRange"
-              min={0}
-              max={1}
-              step={0.1}
-              value={fillAlpha}
-              onChange={value =>
-                setFillAlpha({ type: segmentationRepresentationTypes?.[0] }, value as number)
-              }
-            >
-              <Numeric.SingleRange
-                showNumberInput={true}
-                numberInputClassName="w-10 text-center"
-              />
-            </Numeric.Container>
-          </div>
+            value={[fillAlpha]}
+            onValueChange={([value]) =>
+              setFillAlpha({ type: segmentationRepresentationTypes?.[0] }, value)
+            }
+            max={1}
+            min={0}
+            step={0.1}
+          />
+          <Input
+            className="mx-1 w-10 flex-none"
+            value={fillAlpha}
+            onChange={e =>
+              setFillAlpha({ type: segmentationRepresentationTypes?.[0] }, Number(e.target.value))
+            }
+          />
         </div>
 
         <div className="my-2 flex items-center">
           <Label className="text-muted-foreground w-14 flex-none whitespace-nowrap text-xs">
             {t('Border')}
           </Label>
-          <div
+          <Slider
+            value={[outlineWidth]}
+            onValueChange={([value]) =>
+              setOutlineWidth({ type: segmentationRepresentationTypes?.[0] }, value)
+            }
+            max={10}
+            min={0}
+            step={0.1}
             className="mx-1 flex-1"
-            data-cy={`segmentation-config-border${dataCyTypeSuffix}`}
-          >
-            <Numeric.Container
-              mode="singleRange"
-              min={0}
-              max={10}
-              step={0.1}
-              value={outlineWidth}
-              onChange={value =>
-                setOutlineWidth({ type: segmentationRepresentationTypes?.[0] }, value as number)
-              }
-            >
-              <Numeric.SingleRange
-                showNumberInput={true}
-                numberInputClassName="w-10 text-center"
-              />
-            </Numeric.Container>
-          </div>
+          />
+          <Input
+            value={outlineWidth}
+            onChange={e =>
+              setOutlineWidth(
+                { type: segmentationRepresentationTypes?.[0] },
+                Number(e.target.value)
+              )
+            }
+            className="mx-1 w-10 flex-none text-center"
+          />
         </div>
       </div>
 
@@ -155,24 +149,19 @@ export const SegmentationTableConfig: React.FC<{ children?: React.ReactNode }> =
           <Label className="text-muted-foreground w-14 flex-none whitespace-nowrap text-xs">
             {t('Opacity')}
           </Label>
-          <div
+          <Slider
             className="mx-1 flex-1"
-            data-cy={`segmentation-config-opacity-inactive${dataCyTypeSuffix}`}
-          >
-            <Numeric.Container
-              mode="singleRange"
-              min={0}
-              max={1}
-              step={0.1}
-              value={fillAlphaInactive}
-              onChange={value => setFillAlphaInactive({}, value as number)}
-            >
-              <Numeric.SingleRange
-                showNumberInput={true}
-                numberInputClassName="w-10 text-center"
-              />
-            </Numeric.Container>
-          </div>
+            value={[fillAlphaInactive]}
+            onValueChange={([value]) => setFillAlphaInactive({}, value)}
+            max={1}
+            min={0}
+            step={0.1}
+          />
+          <Input
+            className="mx-1 w-10 flex-none"
+            value={fillAlphaInactive}
+            onChange={e => setFillAlphaInactive({}, Number(e.target.value))}
+          />
         </div>
       )}
       {children}

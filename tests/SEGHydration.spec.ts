@@ -11,17 +11,12 @@ test('should hydrate SEG reports correctly', async ({
   DOMOverlayPageObject,
   leftPanelPageObject,
   rightPanelPageObject,
-  viewportPageObject,
 }) => {
   await rightPanelPageObject.toggle();
   await leftPanelPageObject.loadSeriesByDescription('SEG');
 
   await page.waitForTimeout(5000);
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.segHydration.segPreHydration
-  );
+  await checkForScreenshot(page, page, screenShotPaths.segHydration.segPreHydration);
 
   await page.evaluate(() => {
     // Access cornerstone directly from the window object
@@ -45,9 +40,5 @@ test('should hydrate SEG reports correctly', async ({
   await DOMOverlayPageObject.viewport.segmentationHydration.yes.click();
 
   await page.waitForTimeout(5000);
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.segHydration.segPostHydration
-  );
+  await checkForScreenshot(page, page, screenShotPaths.segHydration.segPostHydration);
 });

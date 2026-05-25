@@ -10,7 +10,6 @@ jest.mock('@cornerstonejs/core', () => ({
       WHOLE_SLIDE: 'wholeslide',
       ORTHOGRAPHIC: 'orthographic',
       VOLUME_3D: 'volume3d',
-      ECG: 'ecg',
     },
   },
 }));
@@ -51,14 +50,9 @@ describe('getCornerstoneViewportType', () => {
     expect(result).toBe(Enums.ViewportType.VOLUME_3D);
   });
 
-  it('should return ECG when viewportType is ecg', () => {
-    const result = getCornerstoneViewportType('ecg');
-    expect(result).toBe(Enums.ViewportType.ECG);
-  });
-
   it('should throw error for invalid viewport type', () => {
     expect(() => getCornerstoneViewportType('invalid')).toThrow(
-      'Invalid viewport type: invalid. Valid types are: stack, volume, video, wholeslide, ecg'
+      'Invalid viewport type: invalid. Valid types are: stack, volume, video, wholeslide'
     );
   });
 

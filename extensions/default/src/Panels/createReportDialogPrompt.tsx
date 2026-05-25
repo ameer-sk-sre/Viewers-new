@@ -30,7 +30,6 @@ export default function CreateReportDialogPrompt({
   predecessorImageId,
   extensionManager,
   servicesManager,
-  enableDownload = false,
 }): Promise<{
   value: string;
   dataSourceName: string;
@@ -60,7 +59,6 @@ export default function CreateReportDialogPrompt({
         predecessorImageId,
         minSeriesNumber,
         modality,
-        enableDownload,
         onSave: async ({
           reportName,
           dataSource: selectedDataSource,

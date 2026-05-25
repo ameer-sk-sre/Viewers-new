@@ -13,16 +13,10 @@ test('should display the rectangle tool', async ({
   viewportPageObject,
 }) => {
   await mainToolbarPageObject.measurementTools.rectangleROI.click();
-  const activeViewport = await viewportPageObject.active;
-  await activeViewport.clickAt([
+  await viewportPageObject.active.clickAt([
     { x: 476, y: 159 },
     { x: 591, y: 217 },
   ]);
   await DOMOverlayPageObject.viewport.measurementTracking.confirm.click();
-
-  await checkForScreenshot(
-    page,
-    viewportPageObject.grid,
-    screenShotPaths.rectangle.rectangleDisplayedCorrectly
-  );
+  await checkForScreenshot(page, page, screenShotPaths.rectangle.rectangleDisplayedCorrectly);
 });

@@ -48,14 +48,15 @@ services:
   # TODO: Update to use Postgres
   # https://github.com/mrts/docker-postgresql-multiple-databases
   orthanc:
-    image: orthancteam/orthanc:24.12.1
+    image: jodogne/orthanc-plugins:latest
+    platform: linux/amd64
     hostname: orthanc
     container_name: orthancPACS
     volumes:
       # Config
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
       # Persist data on external named volume
-      - orthanc-storage:/var/lib/orthanc/db
+      - /mnt/efs/orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
     depends_on:
       - mysql

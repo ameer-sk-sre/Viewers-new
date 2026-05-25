@@ -39,7 +39,7 @@ services:
       # Config
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
       # Persist data
-      - orthanc-storage:/var/lib/orthanc/db
+      - /mnt/efs/orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
     ports:
       - '4242:4242' # Orthanc REST API
@@ -64,7 +64,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data-new:/var/lib/mysql
 
 
   # Authentication Proxy
@@ -105,9 +105,9 @@ services:
 
   volumes:
   orthanc-storage:
-  mysql-data:
+  mysql-data-new:
     external: true
-    name: dicom_mysql-data
+    name: dicom_mysql-data-new
 
   redis:
     image: redis:7-alpine

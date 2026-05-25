@@ -103,11 +103,13 @@ services:
       - OAUTH2_PROXY_WHITELIST_DOMAIN=.hrspace.in,.hrspace.in,.medicoveronline.com
       - OAUTH2_PROXY_COOKIE_DOMAINS=.medicoveronline.com
 
-  volumes:
-  orthanc-storage:
-  mysql-data-new:
-    external: true
-    name: dicom_mysql-data-new
-
   redis:
     image: redis:7-alpine
+
+volumes:
+orthanc-storage:
+mysql-data-new:
+  external: true
+  name: dicom_mysql-data-new
+
+  

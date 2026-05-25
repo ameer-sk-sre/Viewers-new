@@ -15,6 +15,7 @@ services:
     volumes:
       # Nginx config
       - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro
       # Logs
       - ./logs/nginx:/var/logs/nginx
       # Let's Encrypt
@@ -119,6 +120,8 @@ services:
 
 volumes:
   orthanc-storage:
+    external: true
+    name : distand_orthanc-storage
   mysql-data-new:
     external: true
     name: dicom_mysql-data-new

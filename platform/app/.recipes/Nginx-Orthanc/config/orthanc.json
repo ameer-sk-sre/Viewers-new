@@ -78,7 +78,7 @@
   "JobsHistorySize": 10,
   "SaveJobs": true,
   "MediaArchiveSize": 1,
-  "StorageAccessOnFind": "Hybrid",
+  "StorageAccessOnFind": "Answers",
   "MetricsEnabled": true,
   "ConcurrentJobs": 2,
   "MaximumStorageSize": 0,

@@ -72,7 +72,7 @@
   "SaveJobs": true,
   "OverwriteInstances": false,
   "MediaArchiveSize": 1,
-  "StorageAccessOnFind": "Hybrid",
+  "StorageAccessOnFind": "Answers",
   "MetricsEnabled": true,
 
   "DicomWeb": {

@@ -18,14 +18,14 @@ services:
       # Logs
       - ./logs/nginx:/var/logs/nginx
       # Let's Encrypt
-      # - letsencrypt_certificates:/etc/letsencrypt
-      # - letsencrypt_challenges:/var/www/letsencrypt
+      - ./config/letsencrypt:/etc/letsencrypt
+      - ./config/certbot:/var/www/certbot
     ports:
       - '443:443' # SSL
       - '80:80' # Web
     depends_on:
-      #   - keycloak
       - orthanc
+      - oauth2-proxy
     restart: on-failure
 
   # LINK: https://hub.docker.com/r/jodogne/orthanc-plugins/
@@ -105,6 +105,15 @@ services:
 
   redis:
     image: redis:7-alpine
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./config/letsencrypt:/etc/letsencrypt
+      - ./config/certbot:/var/www/certbot
+    entrypoint:
+      /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
 
 volumes:
   orthanc-storage:

@@ -107,9 +107,9 @@ services:
     image: redis:7-alpine
 
 volumes:
-orthanc-storage:
-mysql-data-new:
-  external: true
-  name: dicom_mysql-data-new
+  orthanc-storage:
+  mysql-data-new:
+    external: true
+    name: dicom_mysql-data-new
 
   

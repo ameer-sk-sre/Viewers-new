@@ -26,6 +26,16 @@
     "StowMaxSize": 10,
     "QidoCaseSensitive": false
   },
+  "MySQL": {
+    "EnableIndex": true,
+    "EnableStorage": false,
+    "Host": "mysql",
+    "Port": 3306,
+    "Database": "orthanc",
+    "Username": "orthanc",
+    "Password": "orthanc",
+    "Lock": false
+  },
   "DicomServerEnabled": true,
   "HttpServerEnabled": true,
   "HttpDescribeErrors": true,

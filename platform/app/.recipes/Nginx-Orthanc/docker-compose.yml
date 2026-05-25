@@ -27,14 +27,28 @@ services:
       - orthanc
       - oauth2-proxy
     command: >
-      /bin/sh -c "apk add --no-cache openssl >/dev/null 2>&1 || true; mkdir -p /etc/letsencrypt/live/pacs.medicoveronline.com /var/www/certbot && if [ ! -f /etc/letsencrypt/live/pacs.medicoveronline.com/fullchain.pem ]; then openssl req -x509 -nodes -newkey rsa:2048 -days 365 -subj '/CN=pacs.medicoveronline.com' -keyout /etc/letsencrypt/live/pacs.medicoveronline.com/privkey.pem -out /etc/letsencrypt/live/pacs.medicoveronline.com/fullchain.pem; fi && exec nginx -g 'daemon off;'"
+      /bin/sh -c "apk add --no-cache openssl >/dev/null 2>&1 || true;
+      mkdir -p /var/www/certbot;
+      CERT_DIR=/etc/letsencrypt/live/pacs.medicoveronline.com;
+      CERT_FILE=$$CERT_DIR/fullchain.pem;
+      KEY_FILE=$$CERT_DIR/privkey.pem;
+      if [ ! -f $$CERT_FILE ] && [ ! -L $$CERT_FILE ]; then
+        echo '[INFO] No SSL certificate found, generating self-signed certificate...';
+        mkdir -p $$CERT_DIR;
+        openssl req -x509 -nodes -newkey rsa:2048 -days 365
+          -subj '/CN=pacs.medicoveronline.com'
+          -keyout $$KEY_FILE -out $$CERT_FILE;
+      else
+        echo '[INFO] Using existing SSL certificate';
+      fi;
+      exec nginx -g 'daemon off;'"
     restart: on-failure
 
   # LINK: https://hub.docker.com/r/jodogne/orthanc-plugins/
   # TODO: Update to use Postgres
   # https://github.com/mrts/docker-postgresql-multiple-databases
   orthanc:
-    image: jodogne/orthanc-plugins
+    image: orthancteam/orthanc:24.12.1
     hostname: orthanc
     container_name: orthancPACS
     volumes:
@@ -43,17 +57,24 @@ services:
       # Persist data on external named volume
       - orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
+    depends_on:
+      - mysql
+    # Ports exposed to host for direct DICOM/HTTP access
     ports:
-      - '4242:4242' # Orthanc REST API
+      - '4242:4242' # Orthanc DICOM
       - '8042:8042' # Orthanc HTTP
     environment:
       - AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
       - CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
       - VERBOSE=0 # Disable verbose logging in prod
-      - ORTHANC__MY_SQL__HOST=mysql
-      - ORTHANC__MY_SQL__USERNAME=orthanc
-      - ORTHANC__MY_SQL__PASSWORD=${MYSQL_PASSWORD}
-      - ORTHANC__MY_SQL__DATABASE=orthanc
+      - ORTHANC__MYSQL__HOST=mysql
+      - ORTHANC__MYSQL__PORT=3306
+      - ORTHANC__MYSQL__USERNAME=orthanc
+      - ORTHANC__MYSQL__PASSWORD=${MYSQL_PASSWORD}
+      - ORTHANC__MYSQL__DATABASE=orthanc
+      - ORTHANC__MYSQL__ENABLE_INDEX=true
+      - ORTHANC__MYSQL__ENABLE_STORAGE=false
+      - ORTHANC__MYSQL__LOCK=false
 
   mysql:
     image: mysql:8.0.36
@@ -73,6 +94,8 @@ services:
   oauth2-proxy:
     image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
     restart: unless-stopped
+    depends_on:
+      - redis
     environment:
       - OAUTH2_PROXY_PROVIDER=oidc
       - OAUTH2_PROXY_CLIENT_ID=prd-pacs
@@ -102,7 +125,7 @@ services:
       - OAUTH2_PROXY_REVERSE_PROXY=true
       - OAUTH2_PROXY_COOKIE_SAMESITE=lax
       - OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo-medicover.png
-      - OAUTH2_PROXY_WHITELIST_DOMAIN=.hrspace.in,.hrspace.in,.medicoveronline.com
+      - OAUTH2_PROXY_WHITELIST_DOMAIN=.hrspace.in,.medicoveronline.com
       - OAUTH2_PROXY_COOKIE_DOMAINS=.medicoveronline.com
 
   redis:

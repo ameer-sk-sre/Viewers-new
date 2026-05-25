@@ -38,7 +38,7 @@ services:
     volumes:
       # Config
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
-      # Persist data
+      # Persist data on EFS mount
       - /mnt/efs/orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
     ports:

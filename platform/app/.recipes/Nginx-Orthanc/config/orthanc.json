@@ -1,47 +1,21 @@
 {
-  "Name": "DICOM Server",
-  "DicomPort": 4242,
-  "HttpPort": 8042,
-  "RemoteAccessAllowed": true,
-  "AuthenticationEnabled": false,
-  "StorageCompression": true,
+  "Name": "Orthanc inside Docker",
   "StorageDirectory": "/var/lib/orthanc/db",
   "IndexDirectory": "/var/lib/orthanc/db",
-  "MaximumStorageCacheSize": 8192,
-  "OverwriteInstances": false,
-  "WatchdogDirectory": "/var/orthanc/incoming",
-  "HttpsCACertificates": "/etc/ssl/certs/ca-certificates.crt",
-  "Plugins": [
-    "/usr/share/orthanc/plugins",
-    "/usr/local/share/orthanc/plugins"
-  ],
-  "DicomWeb": {
-    "Enable": true,
-    "Root": "/dicom-web/",
-    "EnableWado": true,
-    "WadoRoot": "/wado",
-    "Host": "0.0.0.0",
-    "Ssl": false,
-    "StowMaxInstances": 10,
-    "StowMaxSize": 10,
-    "QidoCaseSensitive": false
-  },
-  "MySQL": {
-    "EnableIndex": true,
-    "EnableStorage": false,
-    "Host": "mysql",
-    "Port": 3306,
-    "Database": "orthanc",
-    "Username": "orthanc",
-    "Password": "orthanc",
-    "Lock": false
-  },
-  "DicomServerEnabled": true,
+  "StorageCompression": false,
+  "MaximumStorageSize": 0,
+  "MaximumPatientCount": 0,
+  "LuaScripts": [],
+  "Plugins": ["/usr/share/orthanc/plugins", "/usr/local/share/orthanc/plugins"],
+  "ConcurrentJobs": 2,
   "HttpServerEnabled": true,
+  "HttpPort": 8042,
   "HttpDescribeErrors": true,
   "HttpCompressionEnabled": true,
+  "DicomServerEnabled": true,
   "DicomAet": "ORTHANC",
   "DicomCheckCalledAet": false,
+  "DicomPort": 4242,
   "DefaultEncoding": "Latin1",
   "DeflatedTransferSyntaxAccepted": true,
   "JpegTransferSyntaxAccepted": true,
@@ -52,8 +26,14 @@
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
+
+  "RemoteAccessAllowed": true,
   "SslEnabled": false,
   "SslCertificate": "certificate.pem",
+  "AuthenticationEnabled": false,
+  "RegisteredUsers": {
+    "test": "test"
+  },
   "DicomModalities": {},
   "DicomModalitiesInDatabase": false,
   "DicomAlwaysAllowEcho": true,
@@ -63,9 +43,12 @@
   "OrthancPeers": {},
   "OrthancPeersInDatabase": false,
   "HttpProxy": "",
+
   "HttpVerbose": true,
+
   "HttpTimeout": 10,
   "HttpsVerifyPeers": true,
+  "HttpsCACertificates": "",
   "UserMetadata": {},
   "UserContentType": {},
   "StableAge": 60,
@@ -87,11 +70,20 @@
   "SynchronousCMove": true,
   "JobsHistorySize": 10,
   "SaveJobs": true,
+  "OverwriteInstances": false,
   "MediaArchiveSize": 1,
-  "StorageAccessOnFind": "Answers",
+  "StorageAccessOnFind": "Always",
   "MetricsEnabled": true,
-  "ConcurrentJobs": 2,
-  "MaximumStorageSize": 0,
-  "MaximumPatientCount": 0,
-  "LuaScripts": []
+
+  "DicomWeb": {
+    "Enable": true,
+    "Root": "/dicom-web/",
+    "EnableWado": true,
+    "WadoRoot": "/wado",
+    "Host": "127.0.0.1",
+    "Ssl": false,
+    "StowMaxInstances": 10,
+    "StowMaxSize": 10,
+    "QidoCaseSensitive": false
+  }
 }

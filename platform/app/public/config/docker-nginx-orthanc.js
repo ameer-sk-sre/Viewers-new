@@ -10,6 +10,9 @@ window.config = {
   showLoadingIndicator: true,
   experimentalStudyBrowserSort: false,
   strictZSpacingForVolumeViewport: true,
+  investigationalUseDialog: {
+    option: 'never',
+  },
   studyPrefetcher: {
     enabled: true,
     displaySetsCount: 2,

@@ -5,6 +5,16 @@ import EVENTS from './EVENTS';
 
 const displaySetCache = new Map<string, DisplaySet>();
 
+const NON_IMAGE_SOP_CLASSES = [
+  '1.2.840.10008.5.1.4.1.1.11.1',
+  '1.2.840.10008.5.1.4.1.1.11.2',
+  '1.2.840.10008.5.1.4.1.1.88.11',
+  '1.2.840.10008.5.1.4.1.1.88.22',
+  '1.2.840.10008.5.1.4.1.1.88.67',
+  '1.2.840.10008.5.1.4.1.1.66',
+];
+
+
 /**
  * Filters the instances set by instances not in
  * display sets.  Done in O(n) time.
@@ -302,7 +312,15 @@ export default class DisplaySetService extends PubSubService {
   public makeDisplaySetForInstances(instancesSrc: InstanceMetadata[], settings): DisplaySet[] {
     // creating a sopClassUID list and for each sopClass associate its respective
     // instance list
-    const instancesForSetSOPClasses = instancesSrc.reduce((sopClassList, instance) => {
+
+    const instancesSrcFiltered = instancesSrc.filter(
+      instance => !NON_IMAGE_SOP_CLASSES.includes(instance.SOPClassUID)
+    );
+
+    if (!instancesSrcFiltered.length) {
+      return [];
+    }
+    const instancesForSetSOPClasses = instancesSrcFiltered.reduce((sopClassList, instance) => {
       if (!(instance.SOPClassUID in sopClassList)) {
         sopClassList[instance.SOPClassUID] = [];
       }

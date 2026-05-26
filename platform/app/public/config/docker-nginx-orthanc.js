@@ -32,6 +32,7 @@ window.config = {
         thumbnailRendering: 'wadors',
         dicomUploadEnabled: true,
         omitQuotationForMultipartRequest: true,
+        withCredentials: true,
       },
     },
     {

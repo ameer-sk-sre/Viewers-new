@@ -1,0 +1,710 @@
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: none;
+  --highlight: 195 28% 92%;
+  --neutral: 210 8% 58%;
+  --neutral-light: 210 12% 76%;
+  --neutral-dark: 220 10% 24%;
+  --background: 222 18% 10%;
+  --foreground: 210 20% 95%;
+  --card: 222 16% 14%;
+  --card-foreground: 210 20% 95%;
+  --popover: 220 16% 16%;
+  --popover-foreground: 210 20% 95%;
+  --primary: 198 20% 88%;
+  --primary-foreground: 220 18% 12%;
+  --secondary: 219 12% 24%;
+  --secondary-foreground: 210 16% 88%;
+  --muted: 220 14% 13%;
+  --muted-foreground: 210 10% 68%;
+  --accent: 214 14% 20%;
+  --accent-foreground: 210 18% 94%;
+  --destructive: 0 54% 48%;
+  --destructive-foreground: 0 0% 97%;
+  --border: 214 12% 23%;
+  --input: 214 10% 26%;
+  --ring: 196 24% 80%;
+  --chart-1: 204 20% 80%;
+  --chart-2: 214 12% 64%;
+  --chart-3: 214 10% 48%;
+  --chart-4: 214 8% 36%;
+  --chart-5: 214 8% 26%;
+  background:
+    radial-gradient(circle at top left, rgba(122, 138, 158, 0.16), transparent 24%),
+    radial-gradient(circle at top right, rgba(92, 108, 125, 0.1), transparent 22%),
+    linear-gradient(180deg, #21262d 0%, #1b2027 26%, #15191f 100%);
+  color: hsl(var(--foreground));
+}
+
+#root {
+  height: 100%;
+  min-height: 100%;
+  background: transparent;
+}
+
+.radiomind-viewer-page {
+  display: flex;
+  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.radiomind-viewer-stage {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+.radiomind-clinical-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px 8px;
+  background:
+    radial-gradient(circle at top left, rgba(96, 122, 156, 0.16), transparent 24%),
+    linear-gradient(180deg, rgba(34, 41, 51, 0.98), rgba(24, 29, 36, 0.98));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 14px 32px rgba(0, 0, 0, 0.2);
+}
+
+.radiomind-header-topband {
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: stretch;
+  transition: all 180ms ease;
+}
+
+.radiomind-header-topband-brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.radiomind-header-meta-panel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radiomind-header-summary-strip {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.radiomind-header-summary-pill {
+  display: inline-flex;
+  max-width: 100%;
+  min-width: 0;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #dfe7ef;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radiomind-header-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.radiomind-header-meta-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+    rgba(10, 14, 20, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.radiomind-header-meta-label {
+  color: rgba(199, 209, 219, 0.62);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.radiomind-header-meta-value {
+  color: #f1f5f9;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radiomind-header-topband-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.radiomind-header-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(115, 201, 255, 0.18);
+  border-radius: 11px;
+  background:
+    linear-gradient(180deg, rgba(94, 128, 166, 0.22), rgba(29, 40, 52, 0.18)),
+    rgba(12, 18, 24, 0.4);
+  color: #dceefe;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.radiomind-header-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+    rgba(12, 17, 23, 0.4);
+  color: #dce7f2;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.radiomind-header-collapse-btn:hover {
+  border-color: rgba(115, 201, 255, 0.22);
+  background:
+    linear-gradient(180deg, rgba(126, 164, 202, 0.18), rgba(255, 255, 255, 0.02)),
+    rgba(12, 17, 23, 0.48);
+}
+
+.radiomind-header-collapse-btn svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 160ms ease;
+}
+
+.radiomind-header-topband.is-collapsed {
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.radiomind-header-topband.is-collapsed .radiomind-header-meta-panel {
+  justify-content: center;
+}
+
+.radiomind-header-topband.is-collapsed .radiomind-header-summary-strip {
+  display: flex;
+}
+
+.radiomind-header-topband.is-collapsed .radiomind-header-meta-grid {
+  display: none;
+}
+
+.radiomind-header-topband.is-collapsed .radiomind-header-status-pill {
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: 11px;
+}
+
+.radiomind-toolbar-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0 4px;
+  scrollbar-width: none;
+}
+
+.radiomind-toolbar-band::-webkit-scrollbar {
+  display: none;
+}
+
+.radiomind-toolbar-band-shell {
+  display: flex;
+  min-width: 0;
+}
+
+.radiomind-toolbar-band-full {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.radiomind-toolbar-band-full {
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.radiomind-toolbar-band-full::-webkit-scrollbar {
+  display: none;
+}
+
+.radiomind-toolbar-cluster {
+  display: flex;
+  flex-shrink: 0;
+  padding-right: 6px;
+  margin-right: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.radiomind-toolbar-cluster:last-child {
+  padding-right: 0;
+  margin-right: 0;
+  border-right: 0;
+}
+
+.radiomind-toolbar-cluster-body {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+}
+
+.radiomind-toolbar-cluster-body > * {
+  flex-shrink: 0;
+}
+
+.radiomind-toolbar-cluster-body button,
+.radiomind-toolbar-cluster-body [role='button'] {
+  border-radius: 8px;
+}
+
+.radiomind-toolbar-cluster-body [data-cy='tool-button'],
+.radiomind-toolbar-cluster-body [data-cy='toolbox-ui-group'],
+.radiomind-toolbar-cluster-body [data-cy='split-button-primary'],
+.radiomind-toolbar-cluster-body [data-cy='toolbar-drop-down'] {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  transform: scale(0.8);
+  transform-origin: center;
+}
+
+.radiomind-toolbar-cluster-body [data-cy='tool-button'][data-state='on'],
+.radiomind-toolbar-cluster-body [data-cy='toolbox-ui-group'][data-state='on'],
+.radiomind-toolbar-cluster-body .bg-primary {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(112, 197, 255, 0.22);
+}
+
+.radiomind-header-toolbar-shell {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.radiomind-header-brand {
+  width: 276px;
+}
+
+.radiomind-header-toolbar-track {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.radiomind-header-toolbar-track::-webkit-scrollbar {
+  display: none;
+}
+
+.radiomind-header-toolbar {
+  min-width: max-content;
+  padding-right: 8px;
+}
+
+.radiomind-viewer-page {
+  background: hsl(var(--background));
+}
+
+.radiomind-viewer-stage {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.radiomind-viewport-stage {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.035), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0)),
+    linear-gradient(180deg, #14181d 0%, #101317 100%);
+}
+
+.radiomind-viewport-shell {
+  align-items: stretch;
+  justify-content: stretch;
+  min-width: 0;
+  min-height: 0;
+}
+
+.radiomind-viewport-stage [data-cy='viewport-grid'],
+.radiomind-viewport-stage .viewport-grid {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0;
+  min-height: 0;
+}
+
+.radiomind-viewport-stage [data-cy='viewport-grid'] > div,
+.radiomind-viewport-stage .viewport-grid > div {
+  min-width: 0;
+  min-height: 0;
+}
+
+.radiomind-viewport-stage .viewport-wrapper,
+.radiomind-viewport-stage [data-cy='viewport-pane'],
+.radiomind-viewport-stage [data-cy^='viewport-pane'] {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.radiomind-viewer-logo {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 0;
+  color: #f4f7fb;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.radiomind-viewer-logo-copy {
+  font-size: 12px;
+  line-height: 1.05;
+  color: #f3f5f7;
+}
+
+.radiomind-study-browser {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+    linear-gradient(180deg, #1a1f25 0%, #151a1f 100%);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.025);
+}
+
+.radiomind-study-browser-settings {
+  height: 54px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    rgba(10, 14, 19, 0.25);
+}
+
+.radiomind-study-item {
+  margin: 0 6px;
+}
+
+.radiomind-study-item-trigger {
+  min-height: 46px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+    rgba(255, 255, 255, 0.01);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.radiomind-study-item-trigger[data-state='open'],
+.radiomind-study-item-trigger:hover {
+  border-color: rgba(223, 228, 236, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.02);
+}
+
+.radiomind-study-item-content {
+  padding-bottom: 4px;
+}
+
+.radiomind-thumbnail {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012)),
+    rgba(255, 255, 255, 0.012);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.radiomind-thumbnail:hover {
+  border-color: rgba(224, 228, 234, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(255, 255, 255, 0.018);
+}
+
+.radiomind-study-browser [role='tablist'] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radiomind-study-browser [role='tab'] {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.cornerstone-viewport-element {
+  width: 100% !important;
+  height: 100% !important;
+  border: 1px solid rgba(210, 216, 224, 0.12);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.018), transparent 20%),
+    #060708;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.ViewportOverlay {
+  color: rgba(238, 241, 245, 0.94);
+  font-family: 'SFMono-Regular', 'Consolas', 'Menlo', monospace;
+}
+
+.ViewportOverlay .overlay-element {
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+.overlay-top {
+  top: 1rem;
+}
+
+.overlay-bottom {
+  bottom: 1rem;
+}
+
+.viewport-overlay.left-viewport {
+  left: 0.75rem;
+}
+
+.viewport-overlay.right-viewport-scrollbar {
+  right: 0.75rem;
+}
+
+[data-cy='viewport-overlay-bottom-left'],
+[data-cy='viewport-overlay-bottom-right'] {
+  opacity: 0.92;
+}
+
+@media (max-width: 1200px) {
+  .radiomind-header-topband {
+    grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+  }
+
+  .radiomind-header-topband-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .radiomind-header-meta-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .radiomind-header-topband.is-collapsed {
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) auto;
+  }
+
+  .radiomind-header-brand {
+    width: 232px;
+  }
+
+  .radiomind-header-toolbar-shell {
+    left: 252px;
+    right: 180px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .radiomind-clinical-header {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .radiomind-header-topband {
+    grid-template-columns: 1fr;
+  }
+
+  .radiomind-header-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .radiomind-header-summary-strip {
+    flex-wrap: wrap;
+  }
+
+  .radiomind-header-status-pill {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .radiomind-header-brand {
+    width: auto;
+  }
+
+  .radiomind-header-topband.is-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .radiomind-header-topband.is-collapsed .radiomind-header-topband-actions {
+    justify-content: space-between;
+  }
+
+  .radiomind-header-toolbar-shell {
+    left: 0;
+    right: 0;
+    top: calc(100% + 8px);
+    transform: none;
+  }
+
+  .radiomind-header-toolbar-track {
+    padding: 0 8px;
+  }
+
+  .radiomind-study-browser {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .radiomind-header-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .radiomind-header-topband {
+    gap: 8px;
+  }
+
+  .radiomind-header-topband-brand {
+    justify-content: flex-start;
+  }
+
+  .radiomind-header-topband-actions {
+    width: 100%;
+  }
+
+  .radiomind-header-status-pill {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .radiomind-toolbar-band {
+    gap: 4px;
+    padding-bottom: 2px;
+  }
+
+  .radiomind-toolbar-band-full {
+    gap: 4px;
+  }
+
+  .radiomind-toolbar-cluster {
+    padding-right: 4px;
+  }
+
+  .radiomind-toolbar-cluster-body {
+    gap: 2px;
+  }
+
+  .radiomind-study-browser {
+    border-right: 0;
+  }
+
+  .radiomind-viewer-stage [data-panel-group][data-panel-group-direction='horizontal'] {
+    flex-direction: column !important;
+  }
+
+  .radiomind-viewer-stage
+    [data-panel-group][data-panel-group-direction='horizontal']
+    > [data-panel]:first-of-type {
+    order: 2;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: 0 0 min(34vh, 320px) !important;
+  }
+
+  .radiomind-viewer-stage
+    [data-panel-group][data-panel-group-direction='horizontal']
+    > [data-panel]:last-of-type {
+    order: 1;
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .radiomind-viewer-stage
+    [data-panel-group][data-panel-group-direction='horizontal']
+    > [data-panel-resize-handle-id] {
+    display: none !important;
+  }
+
+  .radiomind-viewer-stage
+    [data-panel-group][data-panel-group-direction='horizontal']
+    > [data-panel]:last-of-type
+    .radiomind-viewport-stage {
+    min-height: 44vh;
+  }
+
+  .radiomind-viewport-stage .viewport-grid,
+  [data-cy='viewport-grid'] {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .cornerstone-viewport-element {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .radiomind-viewer-logo {
+    font-size: 13px;
+  }
+
+  .radiomind-viewer-stage
+    [data-panel-group][data-panel-group-direction='horizontal']
+    > [data-panel]:first-of-type {
+    flex-basis: min(38vh, 290px) !important;
+  }
+}

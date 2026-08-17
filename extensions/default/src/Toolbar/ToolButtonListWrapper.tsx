@@ -31,11 +31,11 @@ export default function ToolButtonListWrapper({ buttonSection, id }: ToolButtonL
   }
 
   const items = toolbarButtons.map(button => button.componentProps);
-  const showInlineButtons = id === 'MeasurementTools' || id === 'MoreTools';
+  const showInlineButtons = id === 'MeasurementTools' || id === 'MoreTools' || true;
 
   if (showInlineButtons) {
     return (
-      <ToolButtonList className="flex items-center justify-center gap-1 max-w-[min(920px,calc(100vw-280px))]">
+      <ToolButtonList className="flex items-center justify-start gap-1 max-w-none flex-wrap">
         {items.map(item => (
           <ToolButton
             key={item.id}

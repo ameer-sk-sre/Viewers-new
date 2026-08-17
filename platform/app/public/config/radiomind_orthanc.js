@@ -38,89 +38,19 @@ window.config = {
     default: './customizations/',
   },
   customizationService: {
-    global: [
+    'studyBrowser.studyMode': 'primary',
+    'studyBrowser.viewPresets': [
       {
-        'studyBrowser.studyMode': {
-          $set: 'primary',
-        },
-        'studyBrowser.viewPresets': {
-          $set: [
-            {
-              id: 'list',
-              iconName: 'ListView',
-              selected: false,
-            },
-            {
-              id: 'thumbnails',
-              iconName: 'ThumbnailView',
-              selected: true,
-            },
-          ],
-        },
+        id: 'list',
+        iconName: 'ListView',
+        selected: false,
+      },
+      {
+        id: 'thumbnails',
+        iconName: 'ThumbnailView',
+        selected: true,
       },
     ],
-    mode: {
-      viewer: {
-        toolbarSections: {
-          $set: [
-            {
-              view: [
-                'WindowLevel',
-                'Pan',
-                'Zoom',
-                'StackScroll',
-                'Probe',
-                'Magnify',
-              ],
-            },
-            {
-              measure: [
-                'MeasurementTools',
-                'Length',
-                'Bidirectional',
-                'Angle',
-                'EllipticalROI',
-                'RectangleROI',
-                'CircleROI',
-              ],
-            },
-            {
-              annotate: [
-                'ArrowAnnotate',
-                'PlanarFreehandROI',
-                'SplineROI',
-                'LivewireContour',
-              ],
-            },
-            {
-              layout: ['Layout', 'Crosshairs', 'ReferenceLines', 'ImageSliceSync'],
-            },
-            {
-              other: [
-                'Cine',
-                'Capture',
-                'invert',
-                'rotate-right',
-                'flipHorizontal',
-                'TagBrowser',
-                'Reset',
-                'MoreTools',
-              ],
-            },
-            {
-              MoreTools: [
-                'CobbAngle',
-                'ReferenceLines',
-                'ImageOverlayViewer',
-                'CalibrationLine',
-                'AdvancedMagnify',
-                'WindowLevelRegion',
-              ],
-            },
-          ],
-        },
-      },
-    },
   },
   defaultDataSourceName: 'orthancProxy',
   dataSources: [

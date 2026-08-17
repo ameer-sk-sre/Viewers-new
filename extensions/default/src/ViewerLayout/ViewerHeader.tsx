@@ -3,12 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Header, Icons, useModal } from '@ohif/ui-next';
-import { useSystem } from '@ohif/core';
+import { useSystem, Types, utils, useToolbar } from '@ohif/core';
 import { Toolbar } from '../Toolbar/Toolbar';
 import HeaderPatientInfo from './HeaderPatientInfo';
 import { PatientInfoVisibility } from './HeaderPatientInfo/HeaderPatientInfo';
 import { preserveQueryParameters } from '@ohif/app';
-import { Types, utils } from '@ohif/core';
 import usePatientInfo from '../hooks/usePatientInfo';
 
 const { formatDate } = utils;
@@ -81,6 +80,12 @@ function ToolbarCluster({
 }: {
   section: string;
 }) {
+  const { toolbarButtons } = useToolbar({ buttonSection: section });
+
+  if (!toolbarButtons || toolbarButtons.length === 0) {
+    return null;
+  }
+
   return (
     <div className="radiomind-toolbar-cluster">
       <div className="radiomind-toolbar-cluster-body">

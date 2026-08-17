@@ -2,7 +2,7 @@
   "Name": "Orthanc inside Docker",
   "StorageDirectory": "/var/lib/orthanc/db",
   "IndexDirectory": "/var/lib/orthanc/db",
-  "StorageCompression": false,
+  "StorageCompression": true,
   "MaximumStorageSize": 0,
   "MaximumPatientCount": 0,
   "LuaScripts": [],
@@ -74,6 +74,17 @@
   "MediaArchiveSize": 1,
   "StorageAccessOnFind": "Always",
   "MetricsEnabled": true,
+
+
+  "MySQL": {
+    "EnableIndex": true,
+    "EnableStorage": false,
+    "Host": "mysql",
+    "Port": 3306,
+    "Database": "orthanc",
+    "Username": "orthanc",
+    "Password": "orthanc_password"
+  },
 
   "DicomWeb": {
     "Enable": true,

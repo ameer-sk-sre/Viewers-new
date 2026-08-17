@@ -72,6 +72,10 @@ const useResizablePanels = (
   // - Expand those panels that are initially expanded.
   useLayoutEffect(() => {
     const panelGroupElem = getPanelGroupElement(panelGroupDefinition.groupId);
+    if (!panelGroupElem) {
+      return;
+    }
+
     resizablePanelGroupElemRef.current = panelGroupElem;
 
     const leftPanelElem = getPanelElement(panelGroupDefinition.left.panelId);
@@ -118,6 +122,10 @@ const useResizablePanels = (
   //   values whenever the resizable panel group is resized (e.g. whenever the
   //   browser window is resized).
   useLayoutEffect(() => {
+    if (!resizablePanelGroupElemRef.current) {
+      return;
+    }
+
     // Ensure the side panels' percentage size is in synch with the pixel width of the
     // expanded side panels. In general the two get out-of-sync during a browser
     // window resize. Note that this code is here and NOT in the ResizeObserver
@@ -269,7 +277,13 @@ const useResizablePanels = (
    * Note that the width attributed to the handles must be taken into account.
    */
   const getPercentageSize = pixelSize => {
-    const { width: panelGroupWidth } = resizablePanelGroupElemRef.current?.getBoundingClientRect();
+    const panelGroupRect = resizablePanelGroupElemRef.current?.getBoundingClientRect?.();
+    const panelGroupWidth = panelGroupRect?.width;
+
+    if (!panelGroupWidth || !resizableHandlesWidth.current) {
+      return 0;
+    }
+
     return (pixelSize / (panelGroupWidth - resizableHandlesWidth.current)) * 100;
   };
 
@@ -278,7 +292,13 @@ const useResizablePanels = (
    * Note that the width attributed to the handles must be taken into account.
    */
   const getExpandedPixelWidth = percentageSize => {
-    const { width: panelGroupWidth } = resizablePanelGroupElemRef.current?.getBoundingClientRect();
+    const panelGroupRect = resizablePanelGroupElemRef.current?.getBoundingClientRect?.();
+    const panelGroupWidth = panelGroupRect?.width;
+
+    if (!panelGroupWidth || !resizableHandlesWidth.current) {
+      return 0;
+    }
+
     const expandedWidth =
       (percentageSize / 100) * (panelGroupWidth - resizableHandlesWidth.current) -
       panelGroupDefinition.shared.expandedInsideBorderSize;

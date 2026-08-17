@@ -17,6 +17,7 @@ import NavBar from '../NavBar';
 
 interface HeaderProps {
   children?: ReactNode;
+  CustomContent?: ReactNode;
   menuOptions: Array<{
     title: string;
     icon?: string;
@@ -35,6 +36,7 @@ interface HeaderProps {
 
 function Header({
   children,
+  CustomContent,
   menuOptions,
   isReturnEnabled = true,
   onClickReturnButton,
@@ -51,8 +53,6 @@ function Header({
     }
   };
 
-  const logoComponent = WhiteLabeling?.createLogoComponentFn?.(React, props);
-
   return (
     <IconPresentationProvider
       size="large"
@@ -62,74 +62,77 @@ function Header({
         isSticky={isSticky}
         {...props}
       >
-        <div className="relative w-full px-3 py-2">
-          <div className="absolute right-0 mb-2 flex w-full items-center justify-between gap-4">
-            <div
-              className={classNames(
-                'flex items-center gap-2',
-                isReturnEnabled && 'cursor-pointer'
-              )}
-              onClick={onClickReturn}
-              data-cy="return-to-work-list"
-            >
-              {isReturnEnabled && <Icons.ArrowLeft className="text-primary h-7 w-7" />}
-              <div className="flex items-center gap-2 text-base font-semibold tracking-wide text-white">
-                {logoComponent ? (
-                  <>{logoComponent}</>
-                ) : (
-                  <span>PACS</span>
+        {CustomContent ? (
+          CustomContent
+        ) : (
+          <div className="relative h-[48px] items-center">
+            <div className="radiomind-header-brand absolute left-0 top-1/2 flex -translate-y-1/2 items-center">
+              <div
+                className={classNames(
+                  'mr-3 inline-flex items-center',
+                  isReturnEnabled && 'cursor-pointer'
                 )}
+                onClick={onClickReturn}
+                data-cy="return-to-work-list"
+              >
+                {isReturnEnabled && <Icons.ArrowLeft className="text-primary ml-1 h-7 w-7" />}
+                <div className="ml-1">
+                  {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
+                </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-2">{Secondary}</div>
-
-            <div className="flex items-center gap-2">
+            <div className="absolute left-[260px] top-1/2 h-8 -translate-y-1/2">{Secondary}</div>
+            <div className="radiomind-header-toolbar-shell absolute left-[300px] right-[210px] top-1/2 -translate-y-1/2">
+              <div className="radiomind-header-toolbar-track flex items-center justify-start space-x-2">
+                {children}
+              </div>
+            </div>
+            <div className="absolute right-0 top-1/2 flex -translate-y-1/2 select-none items-center">
               {UndoRedo}
-              <div className="border-primary-dark h-[25px] border-r" />
+              {PatientInfo && <div className="border-muted mx-1.5 h-[25px] border-r"></div>}
               {PatientInfo}
-              <div className="border-primary-dark h-[25px] border-r" />
-              <div className="flex-shrink-0">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-primary hover:bg-primary-dark h-full w-full"
-                    >
-                      <Icons.GearSettings />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {menuOptions.map((option, index) => {
-                      const IconComponent = option.icon
-                        ? Icons[option.icon as keyof typeof Icons]
-                        : null;
-                      return (
-                        <DropdownMenuItem
-                          key={index}
-                          onSelect={option.onClick}
-                          className="flex items-center gap-2 py-2"
+              {menuOptions?.length > 0 && (
+                <>
+                  <div className="border-muted mx-1.5 h-[25px] border-r"></div>
+                  <div className="flex-shrink-0">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-primary hover:bg-muted mt-2 h-full w-full"
                         >
-                          {IconComponent && (
-                            <span className="flex h-4 w-4 items-center justify-center">
-                              <Icons.ByName name={option.icon} />
-                            </span>
-                          )}
-                          <span className="flex-1">{option.title}</span>
-                        </DropdownMenuItem>
-                      );
-                    })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                          <Icons.GearSettings />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {menuOptions.map((option, index) => {
+                          const IconComponent = option.icon
+                            ? Icons[option.icon as keyof typeof Icons]
+                            : null;
+                          return (
+                            <DropdownMenuItem
+                              key={index}
+                              onSelect={option.onClick}
+                              className="flex items-center gap-2 py-2"
+                            >
+                              {IconComponent && (
+                                <span className="flex h-4 w-4 items-center justify-center">
+                                  <Icons.ByName name={option.icon} />
+                                </span>
+                              )}
+                              <span className="flex-1">{option.title}</span>
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-
-          <div className="mx-auto flex w-full max-w-[min(920px,calc(100vw-280px))] flex-wrap items-center justify-center gap-1 px-3">
-            {children}
-          </div>
-        </div>
+        )}
       </NavBar>
     </IconPresentationProvider>
   );

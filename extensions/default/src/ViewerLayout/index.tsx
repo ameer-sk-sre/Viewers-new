@@ -9,7 +9,7 @@ import SidePanelWithServices from '../Components/SidePanelWithServices';
 import { Onboarding, ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@ohif/ui-next';
 import useResizablePanels from './ResizablePanelsHook';
 
-const resizableHandleClassName = 'mt-[1px] bg-black';
+const resizableHandleClassName = 'mt-[1px] bg-background';
 
 function ViewerLayout({
   // From Extension Module Params
@@ -79,11 +79,11 @@ function ViewerLayout({
    * is sized to our viewport.
    */
   useEffect(() => {
-    document.body.classList.add('bg-black');
+    document.body.classList.add('bg-background');
     document.body.classList.add('overflow-hidden');
 
     return () => {
-      document.body.classList.remove('bg-black');
+      document.body.classList.remove('bg-background');
       document.body.classList.remove('overflow-hidden');
     };
   }, []);
@@ -150,7 +150,7 @@ function ViewerLayout({
   const viewportComponents = viewports.map(getViewportComponentData);
 
   return (
-    <div className="relative">
+    <div className="radiomind-viewer-page">
       <ViewerHeader
         hotkeysManager={hotkeysManager}
         extensionManager={extensionManager}
@@ -158,11 +158,10 @@ function ViewerLayout({
         appConfig={appConfig}
       />
       <div
-        className="relative flex w-full flex-row flex-nowrap items-stretch overflow-hidden bg-black pt-[101px]"
-        style={{ height: '100vh' }}
+        className="radiomind-viewer-stage relative flex w-full flex-row flex-nowrap items-stretch overflow-hidden bg-background"
       >
         <React.Fragment>
-          {showLoadingIndicator && <LoadingIndicatorProgress className="h-full w-full bg-black" />}
+          {showLoadingIndicator && <LoadingIndicatorProgress className="h-full w-full bg-background" />}
           <ResizablePanelGroup {...resizablePanelGroupProps}>
             {/* LEFT SIDEPANELS */}
             {hasLeftPanels ? (
@@ -184,9 +183,9 @@ function ViewerLayout({
             ) : null}
             {/* TOOLBAR + GRID */}
             <ResizablePanel {...resizableViewportGridPanelProps}>
-              <div className="flex h-full flex-1 flex-col">
+              <div className="radiomind-viewport-stage flex h-full flex-1 flex-col">
                 <div
-                  className="relative flex h-full flex-1 items-center justify-center overflow-hidden bg-black"
+                  className="radiomind-viewport-shell relative flex h-full flex-1 overflow-hidden bg-background"
                   onMouseEnter={handleMouseEnter}
                 >
                   <ViewportGridComp

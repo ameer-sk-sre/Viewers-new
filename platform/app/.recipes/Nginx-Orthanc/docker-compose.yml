@@ -35,9 +35,7 @@ services:
       if [ ! -f $$CERT_FILE ] && [ ! -L $$CERT_FILE ]; then
         echo '[INFO] No SSL certificate found, generating self-signed certificate...';
         mkdir -p $$CERT_DIR;
-        openssl req -x509 -nodes -newkey rsa:2048 -days 365
-          -subj '/CN=pacs.medicoveronline.com'
-          -keyout $$KEY_FILE -out $$CERT_FILE;
+        openssl req -x509 -nodes -newkey rsa:2048 -days 365 -subj '/CN=pacs.medicoveronline.com' -keyout $$KEY_FILE -out $$CERT_FILE;
       else
         echo '[INFO] Using existing SSL certificate';
       fi;

@@ -144,7 +144,7 @@ window.config = {
         supportsFuzzyMatching: true,
         supportsWildcard: true,
         omitQuotationForMultipartRequest: true,
-        withCredentials: false,
+        withCredentials: true,
       },
     },
   ],

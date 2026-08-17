@@ -48,7 +48,7 @@ interface ToolButtonListDefaultProps extends React.HTMLAttributes<HTMLDivElement
 
 const ToolButtonListDefault = React.forwardRef<HTMLDivElement, ToolButtonListDefaultProps>(
   ({ className, children, tooltip, disabledText, disabled, ...props }, ref) => {
-    const hasTooltip = tooltip || disabledText;
+    const hasTooltip = Boolean(tooltip?.trim() || (disabledText?.trim() && disabled));
 
     const defaultContent = (
       <div

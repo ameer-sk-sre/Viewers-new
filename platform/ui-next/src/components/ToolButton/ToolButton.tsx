@@ -67,11 +67,45 @@ function ToolButton(props: ToolButtonProps) {
     className
   );
 
-  const defaultTooltip = label;
-  const disabledTooltip = disabled && disabledText ? disabledText : null;
-  const hasSecondaryTooltip = tooltip || disabledTooltip;
+  const defaultTooltip = label?.trim() ? label : null;
+  const disabledTooltip = disabled && disabledText?.trim() ? disabledText : null;
+  const secondaryTooltip = tooltip?.trim() ? tooltip : null;
+  const hasSecondaryTooltip = secondaryTooltip || disabledTooltip;
 
-  const showTooltip = hasSecondaryTooltip || defaultTooltip;
+  const showTooltip = Boolean(hasSecondaryTooltip || defaultTooltip);
+
+  const buttonElement = (
+    <span
+      data-cy={id}
+      data-tool={id}
+      data-active={isActive}
+    >
+      <Button
+        className={buttonClasses}
+        onClick={() => {
+          if (!disabled) {
+            onInteraction?.({ itemId: id, commands });
+          }
+        }}
+        variant="ghost"
+        size="icon"
+        aria-label={defaultTooltip || id}
+        disabled={disabled}
+        name={id}
+      >
+        {children || (
+          <Icons.ByName
+            name={icon}
+            className={iconClassName || iconSizeClass}
+          />
+        )}
+      </Button>
+    </span>
+  );
+
+  if (!showTooltip) {
+    return buttonElement;
+  }
 
   return (
     <Tooltip>
@@ -81,47 +115,20 @@ function ToolButton(props: ToolButtonProps) {
       >
         {/* TooltipTrigger is a span since a disabled button does not fire events and the tooltip
         will not show. */}
-        <span
-          data-cy={id}
-          data-tool={id}
-          data-active={isActive}
-        >
-          <Button
-            className={buttonClasses}
-            onClick={() => {
-              if (!disabled) {
-                onInteraction?.({ itemId: id, commands });
-              }
-            }}
-            variant="ghost"
-            size="icon"
-            aria-label={defaultTooltip}
-            disabled={disabled}
-            name={id}
-          >
-            {children || (
-              <Icons.ByName
-                name={icon}
-                className={iconClassName || iconSizeClass}
-              />
-            )}
-          </Button>
-        </span>
+        {buttonElement}
       </TooltipTrigger>
       <TooltipContent
         side="bottom"
         className="text-wrap w-auto max-w-sm whitespace-normal break-words"
       >
-        {showTooltip && (
-          <div className="space-y-1">
-            {defaultTooltip && <div className="text-sm">{defaultTooltip}</div>}
-            {disabledTooltip ? (
-              <div className="text-muted-foreground text-xs">{disabledTooltip}</div>
-            ) : (
-              tooltip && <div className="text-muted-foreground text-xs">{tooltip}</div>
-            )}
-          </div>
-        )}
+        <div className="space-y-1">
+          {defaultTooltip && <div className="text-sm">{defaultTooltip}</div>}
+          {disabledTooltip ? (
+            <div className="text-muted-foreground text-xs">{disabledTooltip}</div>
+          ) : (
+            secondaryTooltip && <div className="text-muted-foreground text-xs">{secondaryTooltip}</div>
+          )}
+        </div>
       </TooltipContent>
     </Tooltip>
   );

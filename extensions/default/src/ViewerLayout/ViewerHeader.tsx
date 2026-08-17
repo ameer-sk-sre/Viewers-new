@@ -193,15 +193,31 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
             className={`radiomind-header-topband ${isMetaCollapsed ? 'is-collapsed' : ''}`}
           >
             <div
-              className="radiomind-header-topband-brand"
+              className="radiomind-header-topband-brand flex items-center gap-2"
               data-cy="return-to-work-list"
-              onClick={() => {
-                if (appConfig.showStudyList) {
-                  onClickReturnButton();
-                }
-              }}
             >
-              {appConfig.whiteLabeling?.createLogoComponentFn?.(React, {}) || <Icons.OHIFLogo />}
+              {appConfig.showStudyList !== false && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary hover:bg-muted/20 mr-1 h-8 w-8 cursor-pointer p-0"
+                  onClick={onClickReturnButton}
+                  title={t('Header:Back to study list') || 'Back to study list'}
+                  aria-label={t('Header:Back to study list') || 'Back to study list'}
+                >
+                  <Icons.ArrowLeft className="h-6 w-6" />
+                </Button>
+              )}
+              <div
+                className={appConfig.showStudyList !== false ? 'cursor-pointer' : ''}
+                onClick={() => {
+                  if (appConfig.showStudyList !== false) {
+                    onClickReturnButton();
+                  }
+                }}
+              >
+                {appConfig.whiteLabeling?.createLogoComponentFn?.(React, {}) || <Icons.OHIFLogo />}
+              </div>
             </div>
             <div className="radiomind-header-meta-panel">
               <div className="radiomind-header-summary-strip">
@@ -268,6 +284,8 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
           <div className="radiomind-toolbar-band-shell">
             <div className="radiomind-toolbar-band">
               <div className="radiomind-toolbar-band-full">
+                <ToolbarCluster section="primary" />
+                <ToolbarCluster section="secondary" />
                 <ToolbarCluster section="view" />
                 <ToolbarCluster section="measure" />
                 <ToolbarCluster section="annotate" />

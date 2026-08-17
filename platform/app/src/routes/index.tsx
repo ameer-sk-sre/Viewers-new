@@ -6,8 +6,7 @@ import { ErrorBoundary } from '@ohif/ui-next';
 // Study list variants are selected by the `workList.variant` customization:
 // - `'legacy'`  → LegacyWorkList (the pre-3.13 study list)
 // - anything else (including `'default'`) → WorkList (ui-next study list)
-import WorkList from './WorkList/WorkList';
-import LegacyWorkList from './LegacyWorkList/LegacyWorkList';
+import WorkList from './WorkList';
 import DataSourceWrapper from './DataSourceWrapper';
 import Local from './Local';
 import Debug from './Debug';
@@ -145,8 +144,7 @@ const createRoutes = ({
 
   console.log('Registering worklist route', routerBasename, path);
 
-  const workListVariant = customizationService.getCustomization('workList.variant');
-  const WorkListComponent = workListVariant === 'legacy' ? LegacyWorkList : WorkList;
+  const WorkListComponent = WorkList;
 
   const WorkListRoute = {
     path: '/',

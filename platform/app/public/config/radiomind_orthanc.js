@@ -28,7 +28,7 @@ window.config = {
       return React.createElement(
         'span',
         {
-          className: 'radiomind-viewer-logo text-white',
+          className: 'radiomind-viewer-logo text-white font-bold text-lg select-none',
         },
         'RadioMind PACS'
       );

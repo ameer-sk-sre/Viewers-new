@@ -1,0 +1,57 @@
+# Docker Compose for Unauthenticated Direct Access via IP Address
+services:
+  ohif_viewer:
+    build:
+      context: ./../../../../
+      dockerfile: ./platform/app/.recipes/Nginx-Orthanc/dockerfile
+    image: webapp:latest
+    container_name: ohif_orthanc_api
+    volumes:
+      - ./config/nginx-api.conf:/etc/nginx/nginx.conf
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - orthanc
+    restart: unless-stopped
+
+  orthanc:
+    image: jodogne/orthanc-plugins:latest
+    platform: linux/amd64
+    hostname: orthanc
+    container_name: orthancPACS
+    volumes:
+      - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
+      - /mnt/efs/orthanc-storage:/var/lib/orthanc/db
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - '4242:4242'
+      - '8042:8042'
+    environment:
+      - VERBOSE=0
+      - ORTHANC__MYSQL__HOST=mysql
+      - ORTHANC__MYSQL__PORT=3306
+      - ORTHANC__MYSQL__USERNAME=orthanc
+      - ORTHANC__MYSQL__PASSWORD=${MYSQL_PASSWORD}
+      - ORTHANC__MYSQL__DATABASE=orthanc
+      - ORTHANC__MYSQL__ENABLE_INDEX=true
+      - ORTHANC__MYSQL__ENABLE_STORAGE=false
+      - ORTHANC__MYSQL__LOCK=false
+
+  mysql:
+    image: mysql:8.0.36
+    platform: linux/amd64
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --log_bin_trust_function_creators=1
+    environment:
+      MYSQL_DATABASE: orthanc
+      MYSQL_USER: orthanc
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data-new:/var/lib/mysql
+
+volumes:
+  mysql-data-new:

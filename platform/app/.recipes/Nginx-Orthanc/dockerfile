@@ -39,8 +39,8 @@ RUN apk add --no-cache openssl
 # Copy build output to serve static files
 COPY --from=builder /usr/src/app/platform/app/dist /var/www/html
 
-# Copy unauthenticated Nginx API config
-COPY platform/app/.recipes/Nginx-Orthanc/config/nginx-api.conf /etc/nginx/nginx.conf
+# Copy Nginx config
+COPY platform/app/.recipes/Nginx-Orthanc/config/nginx.conf /etc/nginx/nginx.conf
 
 # Expose HTTP and HTTPS ports
 EXPOSE 80 443

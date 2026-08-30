@@ -168,10 +168,7 @@ function WorkList({
 
   // Set body style
   useEffect(() => {
-    document.body.classList.add('bg-black');
-    return () => {
-      document.body.classList.remove('bg-black');
-    };
+    // Body inherits radiomind gradient background from global CSS
   }, []);
 
   // Sync URL query parameters with filters
@@ -539,17 +536,19 @@ function WorkList({
   );
 
   return (
-    <div className="flex h-screen flex-col bg-black">
-      <Header
-        isSticky
-        menuOptions={menuOptions}
-        isReturnEnabled={false}
-        WhiteLabeling={appConfig.whiteLabeling}
-        showPatientInfo={PatientInfoVisibility.DISABLED}
-      />
+    <div className="radiomind-worklist-page flex h-screen flex-col">
+      <div className="radiomind-worklist-header-shell">
+        <Header
+          isSticky
+          menuOptions={menuOptions}
+          isReturnEnabled={false}
+          WhiteLabeling={appConfig.whiteLabeling}
+          showPatientInfo={PatientInfoVisibility.DISABLED}
+        />
+      </div>
       <Onboarding />
       <InvestigationalUseDialog dialogConfiguration={appConfig?.investigationalUseDialog} />
-      <div className="flex h-full flex-col overflow-y-auto">
+      <div className="radiomind-worklist-content flex h-full flex-col overflow-y-auto">
         <ScrollArea>
           <div className="flex grow flex-col">
             <StudyListFilter
@@ -587,7 +586,7 @@ function WorkList({
           ) : (
             <div className="flex flex-col items-center justify-center pt-48">
               {appConfig.showLoadingIndicator && isLoadingData ? (
-                <LoadingIndicatorProgress className={'h-full w-full bg-black'} />
+                <LoadingIndicatorProgress className={'h-full w-full bg-transparent'} />
               ) : (
                 <EmptyStudies />
               )}

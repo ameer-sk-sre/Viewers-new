@@ -3,7 +3,17 @@
 window.config = {
   name: 'config/default.js',
   routerBasename: null,
-  // whiteLabeling: {},
+  whiteLabeling: {
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'span',
+        {
+          className: 'radiomind-viewer-logo text-white font-bold text-lg select-none',
+        },
+        'RadioMind PACS'
+      );
+    },
+  },
   extensions: [],
   modes: [],
   customizationService: {},

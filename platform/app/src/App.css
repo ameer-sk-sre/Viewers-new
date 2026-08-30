@@ -44,6 +44,28 @@ body {
   background: transparent;
 }
 
+.radiomind-worklist-page {
+  display: flex;
+  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at top left, rgba(122, 138, 158, 0.16), transparent 24%),
+    radial-gradient(circle at top right, rgba(92, 108, 125, 0.1), transparent 22%),
+    linear-gradient(180deg, #21262d 0%, #1b2027 26%, #15191f 100%);
+  color: #f1f5f9;
+}
+
+.radiomind-worklist-header-shell {
+  background:
+    radial-gradient(circle at top left, rgba(96, 122, 156, 0.16), transparent 24%),
+    linear-gradient(180deg, rgba(34, 41, 51, 0.98), rgba(24, 29, 36, 0.98));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 14px 32px rgba(0, 0, 0, 0.2);
+}
+
 .radiomind-viewer-page {
   display: flex;
   height: 100vh;
@@ -512,11 +534,11 @@ body {
 }
 
 .overlay-top {
-  top: 1rem;
+  top: 1.5rem;
 }
 
 .overlay-bottom {
-  bottom: 1rem;
+  bottom: 2rem;
 }
 
 .viewport-overlay.left-viewport {
@@ -712,4 +734,51 @@ body {
     > [data-panel]:first-of-type {
     flex-basis: min(38vh, 290px) !important;
   }
+}
+
+/* RadioMind WorkList Theme Styling */
+.radiomind-worklist-page .bg-black {
+  background-color: transparent !important;
+}
+
+.radiomind-worklist-page .bg-primary-dark {
+  background-color: rgba(22, 29, 38, 0.8) !important;
+}
+
+.radiomind-worklist-page .bg-secondary-dark {
+  background-color: rgba(32, 42, 54, 0.9) !important;
+}
+
+.radiomind-worklist-page input,
+.radiomind-worklist-page select {
+  background-color: rgba(12, 17, 24, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+  border-radius: 6px !important;
+}
+
+.radiomind-worklist-page input:focus,
+.radiomind-worklist-page select:focus {
+  border-color: rgba(115, 201, 255, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(115, 201, 255, 0.15) !important;
+}
+
+.radiomind-worklist-page table {
+  border-collapse: separate !important;
+  border-spacing: 0 3px !important;
+}
+
+.radiomind-worklist-page table tr {
+  transition: all 150ms ease !important;
+}
+
+.radiomind-worklist-page table tr:hover {
+  background-color: rgba(45, 60, 78, 0.55) !important;
+}
+
+.radiomind-worklist-page .sticky.-top-1 > div {
+  background: linear-gradient(180deg, rgba(34, 41, 51, 0.95), rgba(24, 29, 36, 0.95)) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }

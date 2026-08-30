@@ -115,7 +115,7 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
     if (dataSourceIdx !== -1 && existingDataSource) {
       searchQuery.append('datasources', pathname.substring(dataSourceIdx + 1));
     }
-    preserveQueryParameters(searchQuery, customizationService);
+    preserveQueryParameters(searchQuery);
 
     navigate({
       pathname: '/',
@@ -210,7 +210,11 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
                 className="cursor-pointer"
                 onClick={onClickReturnButton}
               >
-                {appConfig.whiteLabeling?.createLogoComponentFn?.(React, {}) || <Icons.OHIFLogo />}
+                {appConfig.whiteLabeling?.createLogoComponentFn?.(React, {}) || (
+                  <span className="radiomind-viewer-logo text-lg font-bold text-white select-none">
+                    RadioMind PACS
+                  </span>
+                )}
               </div>
             </div>
             <div className="radiomind-header-meta-panel">

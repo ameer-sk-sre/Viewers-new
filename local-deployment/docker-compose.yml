@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  ohif:
+    build:
+      context: ..
+      dockerfile: local-deployment/Dockerfile
+    container_name: local_ohif_viewer
+    ports:
+      - '80:80'
+    depends_on:
+      - orthanc
+    restart: unless-stopped
+
+  orthanc:
+    image: jodogne/orthanc-plugins:latest
+    container_name: local_orthanc_pacs
+    ports:
+      - '4242:4242' # DICOM C-STORE/C-FIND
+      - '8042:8042' # HTTP / DICOMweb
+    volumes:
+      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
+      - orthanc-db:/var/lib/orthanc/db
+    restart: unless-stopped
+
+volumes:
+  orthanc-db:
+    name: local_orthanc_db_data

@@ -1,0 +1,38 @@
+{
+  "Name": "RadioMind Local Orthanc PACS",
+  "StorageDirectory": "/var/lib/orthanc/db",
+  "IndexDirectory": "/var/lib/orthanc/db",
+  "StorageCompression": false,
+  "MaximumStorageSize": 0,
+  "MaximumPatientCount": 0,
+  "LuaScripts": [],
+  "Plugins": [
+    "/usr/share/orthanc/plugins"
+  ],
+  "ConcurrentJobs": 2,
+  "HttpServerEnabled": true,
+  "HttpPort": 8042,
+  "HttpDescribeErrors": true,
+  "HttpCompressionEnabled": true,
+  "WebDavEnabled": true,
+  "DicomServerEnabled": true,
+  "DicomAet": "ORTHANC",
+  "DicomPort": 4242,
+  "DicomCheckCalledAet": false,
+  "DicomAlwaysAllowEcho": true,
+  "DicomAlwaysAllowStore": true,
+  "DicomAlwaysAllowFind": true,
+  "DicomAlwaysAllowGet": true,
+  "DicomAlwaysAllowMove": true,
+  "DicomModalitiesInStudy": true,
+  "RemoteAccessAllowed": true,
+  "AuthenticationEnabled": false,
+  "CrosOriginResourceSharing": true,
+  "DicomWeb": {
+    "Enable": true,
+    "Root": "/dicom-web/",
+    "EnableWado": true,
+    "WadoRoot": "/dicom-web",
+    "SSL": false
+  }
+}

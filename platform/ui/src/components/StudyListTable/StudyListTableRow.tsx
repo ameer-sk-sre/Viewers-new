@@ -30,7 +30,7 @@ const StudyListTableRow = props => {
               }
             )}
           >
-            <table className={classnames('w-full p-4')}>
+            <table className={classnames('w-full pb-1')}>
               <tbody>
                 <tr
                   className={classnames(

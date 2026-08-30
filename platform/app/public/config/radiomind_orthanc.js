@@ -2,7 +2,7 @@
 window.config = {
   name: 'config/radiomind_orthanc.js',
   routerBasename: null,
-  showStudyList: false,
+  showStudyList: true,
   extensions: [],
   modes: [],
   showWarningMessageForCrossOrigin: true,
@@ -10,10 +10,6 @@ window.config = {
   showLoadingIndicator: true,
   experimentalStudyBrowserSort: false,
   strictZSpacingForVolumeViewport: true,
-  showPatientInfo: 'disabled',
-  radiomindHideSettings: true,
-  radiomindHideUndoRedo: true,
-  radiomindDefaultStudyInstanceUIDs: '1.2.840.113564.0.224.76.104.18.160.20260723104212527.10380',
   investigationalUseDialog: {
     option: 'never',
   },
@@ -60,7 +56,7 @@ window.config = {
       configuration: {
         friendlyName: 'RadioMind Orthanc Proxy',
         name: 'Orthanc',
-        wadoUriRoot: '/pacs',
+        wadoUriRoot: '/wado',
         qidoRoot: '/pacs',
         wadoRoot: '/pacs',
         qidoSupportsIncludeField: false,

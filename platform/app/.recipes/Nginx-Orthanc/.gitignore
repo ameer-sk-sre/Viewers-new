@@ -1,2 +1,5 @@
 logs/*
 volumes/*
+.env
+.env.*
+!.env.example

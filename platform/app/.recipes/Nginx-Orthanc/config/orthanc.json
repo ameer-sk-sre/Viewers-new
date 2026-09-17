@@ -91,7 +91,7 @@
     "Root": "/dicom-web/",
     "EnableWado": true,
     "WadoRoot": "/wado",
-    "Host": "pacs.medicoveronline.com",
+    "Host": "pacs.sprintdiagnostics.in",
     "Ssl": false,
     "StowMaxInstances": 10,
     "StowMaxSize": 10,

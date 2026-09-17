@@ -2,11 +2,23 @@
   "Name": "Orthanc inside Docker",
   "StorageDirectory": "/var/lib/orthanc/db",
   "IndexDirectory": "/var/lib/orthanc/db",
-  "StorageCompression": true,
+  "StorageCompression": false,
   "MaximumStorageSize": 0,
   "MaximumPatientCount": 0,
   "LuaScripts": [],
-  "Plugins": ["/usr/share/orthanc/plugins", "/usr/local/share/orthanc/plugins"],
+  "Plugins": [
+    "/usr/share/orthanc/plugins",
+    "/usr/local/share/orthanc/plugins"
+  ],
+  "AwsS3Storage": {
+    "BucketName": "all-restic",
+    "Region": "ap-south-1",
+    "Endpoint": "https://s3.ap-south-1.amazonaws.com",
+    "VirtualHosting": true,
+    "StorageEncryption": false,
+    "VerifyPeers": false,
+    "HybridMode": "Disabled"
+  },
   "ConcurrentJobs": 2,
   "HttpServerEnabled": true,
   "HttpPort": 8042,
@@ -26,6 +38,7 @@
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
+  "HttpsCACertificates": "/etc/ssl/certs/ca-certificates.crt",
 
   "RemoteAccessAllowed": true,
   "SslEnabled": false,
@@ -91,7 +104,7 @@
     "Root": "/dicom-web/",
     "EnableWado": true,
     "WadoRoot": "/wado",
-    "Host": "pacs.medicoveronline.com",
+    "Host": "pacs.sprintdiagnostics.in",
     "Ssl": false,
     "StowMaxInstances": 10,
     "StowMaxSize": 10,

@@ -4,12 +4,12 @@ const DEFAULT_STATE = {
   isCineEnabled: false,
   cines: {
     /*
-     * viewportId: { isPlaying: false, frameRate: 24 };
+     * viewportId: { isPlaying: false, frameRate: 15 };
      */
   },
 };
 
-const DEFAULT_CINE = { isPlaying: false, frameRate: 24 };
+const DEFAULT_CINE = { isPlaying: false, frameRate: 15 };
 
 export const CineContext = createContext(null);
 

@@ -7,7 +7,6 @@
   "MaximumPatientCount": 0,
   "LuaScripts": [],
   "Plugins": [
-    "/usr/share/orthanc/plugins",
     "/usr/local/share/orthanc/plugins"
   ],
   "AwsS3Storage": {
@@ -38,6 +37,7 @@
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
+  "HttpsCACertificates": "/etc/ssl/certs/ca-certificates.crt",
 
   "RemoteAccessAllowed": true,
   "SslEnabled": false,

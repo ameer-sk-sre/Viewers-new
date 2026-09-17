@@ -60,8 +60,7 @@
   "HttpVerbose": true,
 
   "HttpTimeout": 10,
-  "HttpsVerifyPeers": true,
-  "HttpsCACertificates": "",
+  "HttpsVerifyPeers": false,
   "UserMetadata": {},
   "UserContentType": {},
   "StableAge": 60,

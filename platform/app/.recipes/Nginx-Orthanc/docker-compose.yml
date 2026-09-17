@@ -66,6 +66,8 @@ services:
     environment:
       - AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
       - CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_DIR=/etc/ssl/certs
       - ORTHANC__AWS_S3_STORAGE__VERIFY_PEERS=false
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}

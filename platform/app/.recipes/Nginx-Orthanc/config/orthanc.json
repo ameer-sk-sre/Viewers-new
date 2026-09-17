@@ -38,7 +38,6 @@
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
-  "HttpsCACertificates": "/etc/ssl/certs/ca-certificates.crt",
 
   "RemoteAccessAllowed": true,
   "SslEnabled": false,

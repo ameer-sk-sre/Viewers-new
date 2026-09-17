@@ -54,8 +54,8 @@ services:
     volumes:
       # Config
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
-      # Persist data on external named volume
-      - /mnt/efs/orthanc-storage:/var/lib/orthanc/db
+      # Persist data on named volume
+      - orthanc-storage:/var/lib/orthanc/db
     restart: unless-stopped
     depends_on:
       - mysql
@@ -143,6 +143,7 @@ services:
       /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
 
 volumes:
+  orthanc-storage:
   mysql-data:
     external: true
     name: sprint-mysql-data

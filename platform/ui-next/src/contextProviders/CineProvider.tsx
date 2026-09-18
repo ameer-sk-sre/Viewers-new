@@ -9,7 +9,7 @@ const DEFAULT_STATE = {
   },
 };
 
-const DEFAULT_CINE = { isPlaying: false, frameRate: 24 };
+const DEFAULT_CINE = { isPlaying: false, frameRate: 15 };
 
 export const CineContext = createContext(null);
 

@@ -1841,7 +1841,7 @@ function commandsModule({
         const currentCineState = state.cines?.[viewport.viewportId];
         cineService.setCine({
           id: viewport.viewportId,
-          frameRate: currentCineState?.frameRate ?? state.default?.frameRate ?? 24,
+          frameRate: currentCineState?.frameRate ?? state.default?.frameRate ?? 15,
           isPlaying: false,
         });
       });

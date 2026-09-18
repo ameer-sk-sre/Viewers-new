@@ -7,7 +7,7 @@ import ShowcaseRow from './ShowcaseRow';
  */
 export default function CinePlayerShowcase() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [fps, setFps] = useState(24);
+  const [fps, setFps] = useState(15);
   const isBrowser = useIsBrowser();
 
   // If not browser, return null to avoid SSR parse errors

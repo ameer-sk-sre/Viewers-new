@@ -116,7 +116,7 @@ function modeFactory({ modeConfiguration }) {
             return;
           }
 
-          const frameRate = 24;
+          const frameRate = 15;
           cineService.setIsCineEnabled(true);
           cineService.setCine({ id: viewportId, isPlaying: true, frameRate });
 

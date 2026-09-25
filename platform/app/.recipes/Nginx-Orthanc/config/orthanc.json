@@ -2,7 +2,7 @@
   "Name": "Orthanc inside Docker",
   "StorageDirectory": "/var/lib/orthanc/db",
   "IndexDirectory": "/var/lib/orthanc/db",
-  "StorageCompression": true,
+  "StorageCompression": false,
   "MaximumStorageSize": 0,
   "MaximumPatientCount": 0,
   "LuaScripts": [],

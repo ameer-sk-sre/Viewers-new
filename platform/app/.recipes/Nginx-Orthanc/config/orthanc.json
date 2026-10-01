@@ -25,7 +25,6 @@
   "Mpeg2TransferSyntaxAccepted": true,
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
-  "DicomScpTimeout": 30,
 
   "RemoteAccessAllowed": true,
   "SslEnabled": false,

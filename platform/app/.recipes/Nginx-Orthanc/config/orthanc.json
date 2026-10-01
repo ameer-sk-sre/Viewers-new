@@ -25,7 +25,7 @@
   "Mpeg2TransferSyntaxAccepted": true,
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
-
+  "DicomScpTimeout": 30,
   "RemoteAccessAllowed": true,
   "SslEnabled": false,
   "SslCertificate": "certificate.pem",
@@ -62,6 +62,7 @@
   "HttpThreadsCount": 50,
   "StoreDicom": true,
   "QueryRetrieveSize": 10,
+  "DicomAssociationCloseDelay": 5,
   "CaseSensitivePN": false,
   "LoadPrivateDictionary": true,
   "Dictionary": {},

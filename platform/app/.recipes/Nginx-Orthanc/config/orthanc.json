@@ -62,7 +62,6 @@
   "TcpNoDelay": true,
   "HttpThreadsCount": 50,
   "StoreDicom": true,
-  "DicomAssociationCloseDelay": 5,
   "QueryRetrieveSize": 10,
   "CaseSensitivePN": false,
   "LoadPrivateDictionary": true,

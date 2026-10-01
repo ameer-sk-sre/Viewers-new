@@ -46,7 +46,7 @@ services:
   # TODO: Update to use Postgres
   # https://github.com/mrts/docker-postgresql-multiple-databases
   orthanc:
-    image: jodogne/orthanc-plugins:latest
+    image: jodogne/orthanc-plugins@sha256:fbd5e3747430fa478d5e1d68969017f75cabab76731d98e9e46f8f8e755c7d5c
     platform: linux/amd64
     hostname: orthanc
     container_name: orthancPACS

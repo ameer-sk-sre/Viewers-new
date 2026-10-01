@@ -38,7 +38,6 @@
   "DicomAlwaysAllowEcho": true,
   "DicomAlwaysAllowStore": true,
   "DicomCheckModalityHost": false,
-  "DicomScuTimeout": 10,
   "OrthancPeers": {},
   "OrthancPeersInDatabase": false,
   "HttpProxy": "",

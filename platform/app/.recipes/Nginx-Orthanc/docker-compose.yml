@@ -140,11 +140,7 @@ services:
       /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
 
 volumes:
-  orthanc-storage:
-    external: true
-    name : distand_orthanc-storage
   mysql-data-new:
-    external: true
-    name: dicom_mysql-data-new
+    
 
   

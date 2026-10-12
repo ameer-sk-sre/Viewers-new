@@ -201,6 +201,10 @@ module.exports = (env, argv, { SRC_DIR, ENTRY }) => {
         '@hooks': path.resolve(__dirname, '../platform/app/src/hooks'),
         '@routes': path.resolve(__dirname, '../platform/app/src/routes'),
         '@state': path.resolve(__dirname, '../platform/app/src/state'),
+        '@cornerstonejs/tools/dist/esm/utilities/getCalibratedUnits': path.resolve(
+          __dirname,
+          '../extensions/cornerstone/src/utils/getCalibratedUnits.js'
+        ),
       },
       // Which directories to search when resolving modules
       modules: [
@@ -228,6 +232,10 @@ module.exports = (env, argv, { SRC_DIR, ENTRY }) => {
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
       }),
+      new webpack.NormalModuleReplacementPlugin(
+        /(?:@cornerstonejs\/tools\/dist\/esm\/utilities\/getCalibratedUnits|\/utilities\/getCalibratedUnits(\.js)?$)/,
+        path.resolve(__dirname, '../extensions/cornerstone/src/utils/getCalibratedUnits.js')
+      ),
       ...(isProdBuild ? [] : [new ReactRefreshWebpackPlugin({ overlay: false })]),
       // Uncomment to generate bundle analyzer
       // new BundleAnalyzerPlugin(),

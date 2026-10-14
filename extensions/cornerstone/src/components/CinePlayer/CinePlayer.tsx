@@ -43,11 +43,11 @@ function WrappedCinePlayer({
     displaySetInstanceUIDs.forEach(displaySetInstanceUID => {
       const displaySet = displaySetService.getDisplaySetByUID(displaySetInstanceUID);
 
-      if (displaySet.FrameRate) {
-        // displaySet.FrameRate corresponds to DICOM tag (0018,1063) which is defined as the the frame time in milliseconds
-        // So a bit of math to get the actual frame rate.
-        frameRate = Math.round(1000 / displaySet.FrameRate);
-        isPlaying ||= !!appConfig.autoPlayCine;
+      if (displaySet.FrameRate || displaySet.isMultiFrame) {
+        // Always default to 15 FPS for all multi-frame display sets
+        // regardless of DICOM FrameTime value.
+        frameRate = 15;
+        isPlaying = true;
       }
 
       // check if the displaySet is dynamic and set the dynamic info

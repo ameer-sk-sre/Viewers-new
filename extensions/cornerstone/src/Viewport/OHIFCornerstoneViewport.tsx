@@ -57,6 +57,7 @@ const OHIFCornerstoneViewport = React.memo(
       // viewportId dependent and
       // eslint-disable-next-line react/prop-types
       isHangingProtocolLayout,
+      commandsManager,
     } = props;
     const viewportId = viewportOptions.viewportId;
 
@@ -333,6 +334,7 @@ const OHIFCornerstoneViewport = React.memo(
             enabledVPElement={enabledVPElement}
             viewportId={viewportId}
             servicesManager={servicesManager}
+            commandsManager={commandsManager}
           />
           <ActiveViewportBehavior
             viewportId={viewportId}

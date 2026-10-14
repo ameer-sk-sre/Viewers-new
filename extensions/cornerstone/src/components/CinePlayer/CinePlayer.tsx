@@ -11,7 +11,7 @@ function WrappedCinePlayer({
   enabledVPElement: HTMLElement;
   viewportId: string;
 }>) {
-  const { customizationService, displaySetService, viewportGridService } = servicesManager.services;
+  const { customizationService, displaySetService, viewportGridService, commandsManager } = servicesManager.services;
   const [{ isCineEnabled, cines }, cineService] = useCine();
   const [newStackFrameRate, setNewStackFrameRate] = useState(15);
   const [dynamicInfo, setDynamicInfo] = useState(null);
@@ -148,6 +148,7 @@ function WrappedCinePlayer({
       isPlaying={isPlaying}
       dynamicInfo={dynamicInfo}
       customizationService={customizationService}
+      commandsManager={commandsManager}
     />
   );
 }
@@ -159,6 +160,7 @@ function RenderCinePlayer({
   isPlaying,
   dynamicInfo: dynamicInfoProp,
   customizationService,
+  commandsManager,
 }) {
   const CinePlayerComponent = customizationService.getCustomization('cinePlayer');
 
@@ -238,6 +240,12 @@ function RenderCinePlayer({
           frameRate,
         })
       }
+      onSkipForward={() => {
+        commandsManager.runCommand('nextImage', { direction: 1 });
+      }}
+      onSkipBackward={() => {
+        commandsManager.runCommand('previousImage', { direction: -1 });
+      }}
       dynamicInfo={dynamicInfo}
       updateDynamicInfo={updateDynamicInfo}
     />

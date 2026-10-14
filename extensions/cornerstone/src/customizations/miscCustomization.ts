@@ -1,4 +1,4 @@
-import { CinePlayer } from '@ohif/ui-next';
+import CinePlayerWithSkip from '../components/CinePlayer/CinePlayerWithSkip';
 import DicomUpload from '../components/DicomUpload/DicomUpload';
 
 // Provide a wider default container for the DICOM Upload modal, without
@@ -8,7 +8,7 @@ const DicomUploadWithSize = Object.assign(DicomUpload, {
 });
 
 export default {
-  cinePlayer: CinePlayer,
+  cinePlayer: CinePlayerWithSkip,
   autoCineModalities: ['OT', 'US'],
   'panelMeasurement.disableEditing': false,
   onBeforeSRAddMeasurement: ({ measurement, StudyInstanceUID, SeriesInstanceUID }) => {

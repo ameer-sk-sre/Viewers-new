@@ -118,6 +118,11 @@ export default defineConfig({
         from: path.resolve(PUBLIC_DIR, 'config/google.js'),
         to: 'google.js',
       },
+      // Copy API config for unauthenticated API viewer access (port 8043)
+      {
+        from: path.resolve(PUBLIC_DIR, 'config/docker-nginx-orthanc-api.js'),
+        to: 'docker-nginx-orthanc-api.js',
+      },
       // Copy app config
       {
         from: path.resolve(PUBLIC_DIR, APP_CONFIG),

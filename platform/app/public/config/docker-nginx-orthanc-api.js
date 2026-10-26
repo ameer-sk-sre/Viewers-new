@@ -1,7 +1,8 @@
 /** @type {AppTypes.Config} */
 window.config = {
+  name: 'config/docker-nginx-orthanc-api.js',
   routerBasename: null,
-  showStudyList: true,
+  showStudyList: false,
   extensions: [],
   modes: [],
   showWarningMessageForCrossOrigin: true,
@@ -18,17 +19,46 @@ window.config = {
     maxNumPrefetchRequests: 10,
     order: 'closest',
   },
-  
+
   // Flag indicating unrestricted API access (no authentication required)
   unrestrictedAccess: true,
-  
+
+  whiteLabeling: {
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'span',
+        {
+          className: 'radiomind-viewer-logo text-white font-bold text-lg select-none',
+        },
+        'RadioMind PACS'
+      );
+    },
+  },
+  customizationUrlPrefixes: {
+    default: './customizations/',
+  },
+  customizationService: {
+    'studyBrowser.studyMode': 'primary',
+    'studyBrowser.viewPresets': [
+      {
+        id: 'list',
+        iconName: 'ListView',
+        selected: false,
+      },
+      {
+        id: 'thumbnails',
+        iconName: 'ThumbnailView',
+        selected: true,
+      },
+    ],
+  },
   defaultDataSourceName: 'orthancProxy',
   dataSources: [
     {
       namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
       sourceName: 'orthancProxy',
       configuration: {
-        friendlyName: 'Orthanc Server',
+        friendlyName: 'RadioMind Orthanc Proxy',
         name: 'Orthanc',
         wadoUriRoot: '/wado',
         qidoRoot: '/pacs',
@@ -36,7 +66,13 @@ window.config = {
         qidoSupportsIncludeField: false,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
-        dicomUploadEnabled: true,
+        bulkDataURI: {
+          enabled: false,
+        },
+        dicomUploadEnabled: false,
+        enableStudyLazyLoad: true,
+        supportsFuzzyMatching: true,
+        supportsWildcard: true,
         omitQuotationForMultipartRequest: true,
         withCredentials: false,
       },

@@ -20,6 +20,8 @@ services:
       # Let's Encrypt
       - ${LETSENCRYPT_DIR:-./config/letsencrypt}:/etc/letsencrypt
       - ${CERTBOT_WEBROOT:-./config/certbot}:/var/www/certbot
+      # API Config
+      - ../../public/config/docker-nginx-orthanc-api.js:/var/www/html/docker-nginx-orthanc-api.js
     ports:
       - '443:443' # SSL
       - '80:80' # Web

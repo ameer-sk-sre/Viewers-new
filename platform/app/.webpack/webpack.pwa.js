@@ -112,6 +112,11 @@ module.exports = (env, argv) => {
             from: `${PUBLIC_DIR}/config/google.js`,
             to: `${DIST_DIR}/google.js`,
           },
+          // Copy API config for unauthenticated API viewer access
+          {
+            from: `${PUBLIC_DIR}/config/docker-nginx-orthanc-api.js`,
+            to: `${DIST_DIR}/docker-nginx-orthanc-api.js`,
+          },
           // Copy over and rename our target app config file
           {
             from: `${PUBLIC_DIR}/${APP_CONFIG}`,

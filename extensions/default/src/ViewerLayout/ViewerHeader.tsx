@@ -104,6 +104,8 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isReturnEnabled = !!appConfig.showStudyList && !appConfig.unrestrictedAccess;
+
   const onClickReturnButton = () => {
     const { pathname } = location;
     const dataSourceIdx = pathname.indexOf('/', 1);
@@ -196,19 +198,21 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
               className="radiomind-header-topband-brand flex items-center gap-2"
               data-cy="return-to-work-list"
             >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-primary hover:bg-muted/20 mr-1 h-8 w-8 cursor-pointer p-0"
-                onClick={onClickReturnButton}
-                title={t('Header:Back to study list') || 'Back to study list'}
-                aria-label={t('Header:Back to study list') || 'Back to study list'}
-              >
-                <Icons.ArrowLeft className="h-6 w-6" />
-              </Button>
+              {isReturnEnabled && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary hover:bg-muted/20 mr-1 h-8 w-8 cursor-pointer p-0"
+                  onClick={onClickReturnButton}
+                  title={t('Header:Back to study list') || 'Back to study list'}
+                  aria-label={t('Header:Back to study list') || 'Back to study list'}
+                >
+                  <Icons.ArrowLeft className="h-6 w-6" />
+                </Button>
+              )}
               <div
-                className="cursor-pointer"
-                onClick={onClickReturnButton}
+                className={isReturnEnabled ? 'cursor-pointer' : ''}
+                onClick={isReturnEnabled ? onClickReturnButton : undefined}
               >
                 {appConfig.whiteLabeling?.createLogoComponentFn?.(React, {}) || (
                   <span className="radiomind-viewer-logo text-lg font-bold text-white select-none">
@@ -295,7 +299,7 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
         </div>
       }
       menuOptions={appConfig.radiomindHideSettings ? [] : menuOptions}
-      isReturnEnabled={!!appConfig.showStudyList}
+      isReturnEnabled={isReturnEnabled}
       onClickReturnButton={onClickReturnButton}
       WhiteLabeling={appConfig.whiteLabeling}
       PatientInfo={

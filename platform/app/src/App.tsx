@@ -91,7 +91,9 @@ function App({
 
   // Set appConfig
   const appConfigState = init.appConfig;
-  const { routerBasename, modes, dataSources, oidc, showStudyList } = appConfigState;
+  const { routerBasename, modes, dataSources, oidc, unrestrictedAccess } = appConfigState;
+  const showStudyList = unrestrictedAccess ? false : appConfigState.showStudyList;
+  appConfigState.showStudyList = showStudyList;
 
   // get the maximum 3D texture size
   const canvas = document.createElement('canvas');

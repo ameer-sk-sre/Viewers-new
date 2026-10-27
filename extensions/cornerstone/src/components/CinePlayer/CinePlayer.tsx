@@ -13,7 +13,7 @@ function WrappedCinePlayer({
   viewportId: string;
   commandsManager?: any;
 }>) {
-  const { customizationService, displaySetService, viewportGridService, commandsManager } = servicesManager.services;
+  const { customizationService, displaySetService, viewportGridService, cornerstoneViewportService } = servicesManager.services;
   const [{ isCineEnabled, cines }, cineService] = useCine();
   const [newStackFrameRate, setNewStackFrameRate] = useState(15);
   const [dynamicInfo, setDynamicInfo] = useState(null);
@@ -151,6 +151,7 @@ function WrappedCinePlayer({
       dynamicInfo={dynamicInfo}
       customizationService={customizationService}
       commandsManager={commandsManager}
+      cornerstoneViewportService={cornerstoneViewportService}
     />
   );
 }
@@ -163,6 +164,7 @@ function RenderCinePlayer({
   dynamicInfo: dynamicInfoProp,
   customizationService,
   commandsManager,
+  cornerstoneViewportService,
 }) {
   const CinePlayerComponent = customizationService.getCustomization('cinePlayer');
 
@@ -243,10 +245,20 @@ function RenderCinePlayer({
         })
       }
       onSkipForward={() => {
-        commandsManager.runCommand('nextImage', { direction: 1 });
+        const viewport = cornerstoneViewportService?.getCornerstoneViewport(viewportId);
+        if (viewport) {
+          csUtils.scroll(viewport, { delta: 1 });
+        } else if (commandsManager?.runCommand) {
+          commandsManager.runCommand('nextImage', { direction: 1 });
+        }
       }}
       onSkipBackward={() => {
-        commandsManager.runCommand('previousImage', { direction: -1 });
+        const viewport = cornerstoneViewportService?.getCornerstoneViewport(viewportId);
+        if (viewport) {
+          csUtils.scroll(viewport, { delta: -1 });
+        } else if (commandsManager?.runCommand) {
+          commandsManager.runCommand('previousImage', { direction: -1 });
+        }
       }}
       dynamicInfo={dynamicInfo}
       updateDynamicInfo={updateDynamicInfo}
